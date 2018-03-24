@@ -515,86 +515,6 @@ function getTemplates(dir, callback) {
     })
 }
 
-function addGlobal(data) {
-    data.console = console
-
-    data.path = path
-    data.fs = fs
-    data.vm = vm
-
-    data.mkdirp = mkdirp
-    data.render = render
-
-    data.paths = paths
-    data.options = options
-    data.log = log
-    data.parsers = parsers
-    data.processors = processors
-
-    data.isObject = isObject
-    data.copyObjTo = copyObjTo
-    data.canParse = canParse
-    data.canProcess = canProcess
-    data.getParser = getParser
-    data.getProcessor = getProcessor
-    data.parseFile = parseFile
-    data.processFile = processFile
-
-    data.addGlobal = addGlobal
-
-    if (typeof run !== 'function') {
-        data.run = () => {
-            log.error('|SCRIPT| run function was not present in global!')
-        }
-    } else {
-        data.run = run
-    }
-
-    if (typeof save !== 'function') {
-        data.save = () => {
-            log.error('|SCRIPT| save function was not present in global!')
-        }
-    } else {
-        data.save = save
-    }
-
-    data.scripts = scripts
-}
-
-let scriptFunctions = {
-    run: (name, data) => {
-        if (scripts.hasOwnProperty(name)) {
-            if (isObject(data)) {
-                addGlobal(data)
-                vm.createContext(data)
-
-                return vm.runInContext(scripts[name], data)
-            }
-
-            return vm.runInThisContext(scripts[name])
-        }
-    },
-    save: (data, filepath) => {
-        if (typeof data !== 'string') {
-            data = data.toString()
-        }
-        if (typeof filepath !== 'string') {
-            log.warning('|SCRIPT| save was called without string filepath!')
-            return false
-        }
-
-        try {
-            fs.writeFileSync(path.join(paths.output, filepath), data)
-        } catch (error) {
-            log.error(
-                '|SCRIPT| save was unable to write to file',
-                filepath,
-                error.message || error
-            )
-        }
-    }
-}
-
 function runScripts(data, callback) {
     if (!isObject(data)) {
         if (typeof callback === 'function') {
@@ -606,33 +526,92 @@ function runScripts(data, callback) {
         return false
     }
 
-    let scriptGlobals = {}
-    scriptGlobals.globals = scriptGlobals
-
     if (typeof callback !== 'function') {
         log.error('runScripts was not given callback!')
 
         return false
     }
 
-    let scriptData = {}
+    let scriptGlobals = {
+        console: console,
 
-    scriptData.data = {}
+        path: path,
+        fs: fs,
+        vm: vm,
 
-    copyObjTo(data, scriptData.data)
+        mkdirp: mkdirp,
+        render: render,
 
-    addGlobal(scriptData)
+        paths: paths,
+        options: options,
+        log: scriptLog,
+        parsers: parsers,
+        processors: processors,
 
-    scriptData.log = scriptLog
+        isObject: isObject,
+        copyObjTo: copyObjTo,
+        canParse: canParse,
+        canProcess: canProcess,
+        getParser: getParser,
+        getProcessor: getProcessor,
+        parseFile: parseFile,
+        processFile: processFile,
 
-    scriptData.scripts = {}
-    for (let prop in scriptFunctions) {
-        if (scriptFunctions.hasOwnProperty(prop)) {
-            scriptData[prop] = scriptFunctions[prop]
+        scripts: {},
+        data: {},
+
+        run: (name, data) => {
+            if (scripts.hasOwnProperty(name)) {
+                if (isObject(data)) {
+                    addGlobal(data)
+                    vm.createContext(data)
+
+                    return vm.runInContext(scripts[name], data)
+                }
+
+                return vm.runInThisContext(scripts[name])
+            }
+        },
+        save: (data, filepath) => {
+            if (typeof data !== 'string') {
+                data = data.toString()
+            }
+            if (typeof filepath !== 'string') {
+                log.warning('|SCRIPT| save was called without string filepath!')
+                return false
+            }
+
+            try {
+                fs.writeFileSync(path.join(paths.output, filepath), data)
+            } catch (error) {
+                log.error(
+                    '|SCRIPT| save was unable to write to file',
+                    filepath,
+                    error.message || error
+                )
+            }
         }
     }
 
-    vm.createContext(scriptData)
+    scriptGlobals.data = {}
+
+    copyObjTo(data, scriptGlobals.data)
+
+    scriptGlobals.addGlobal = data => {
+        if (!isObject(data)) {
+            return false
+        }
+
+        for (let prop in globals) {
+            if (globals.hasOwnProperty(prop)) {
+                data[prop] = globals[prop]
+            }
+        }
+    }
+
+    scriptGlobals.globals = scriptGlobals
+
+    vm.createContext(scriptGlobals)
 
     let toRun = []
 
@@ -646,7 +625,7 @@ function runScripts(data, callback) {
                     toRun.length.toString()
                 )
 
-                vm.runInContext(toRun[i], scriptData)
+                vm.runInContext(toRun[i], scriptGlobals)
             }
 
             callback()
@@ -689,7 +668,7 @@ function runScripts(data, callback) {
                                     .basename(item, path.extname(item))
                                     .slice(1)
 
-                                scriptData.scripts[name] = code
+                                scriptGlobals.scripts[name] = code
                             }
                         }
 
