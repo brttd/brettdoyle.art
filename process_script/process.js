@@ -4,8 +4,6 @@ const vm = require('vm')
 
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
-const marked = require('marked')
-const yaml = require('js-yaml')
 
 const render = require('./render')
 
@@ -53,6 +51,22 @@ const log = {
         log.add('error', arguments)
     }
 }
+const scriptLog = {
+    pLog: log,
+
+    debug: function() {
+        scriptLog.pLog.add('SCRIPT', arguments)
+    },
+    info: function() {
+        scriptLog.pLog.add('SCRIPT', arguments)
+    },
+    warning: function() {
+        scriptLog.pLog.add('SCRIPT', arguments)
+    },
+    error: function() {
+        scriptLog.pLog.add('SCRIPT', arguments)
+    }
+}
 
 const parsers = []
 const processors = []
@@ -96,11 +110,15 @@ try {
     return
 }
 
+function isObject(obj) {
+    return typeof obj === 'object' && !Array.isArray(obj) && obj !== null
+}
+
 function copyObjTo(obj, target) {
     for (let prop in obj) {
         if (obj.hasOwnProperty(prop)) {
-            if (typeof obj[prop] === 'object') {
-                if (typeof target[prop] !== 'object') {
+            if (isObject(obj[prop])) {
+                if (!isObject(target[prop])) {
                     target[prop] = {}
                 }
 
@@ -222,7 +240,7 @@ function processFile(file, data, callback) {
         return false
     }
 
-    if (typeof data !== 'object') {
+    if (!isObject(data)) {
         if (typeof callback === 'function') {
             callback(new Error('Given data was not object!'))
         } else {
@@ -297,19 +315,29 @@ function processFile(file, data, callback) {
     }
 }
 
-function searchDir(dir, callback) {
+function parseAndProcess(dir, templates, callback) {
     if (typeof dir !== 'string') {
         if (typeof callback === 'function') {
             callback(new Error('Given directory path was not a string!'))
         } else {
-            log.error('searchDir was not given string directory path!')
+            log.error('parseAndProcess was not given string directory path!')
+        }
+
+        return false
+    }
+
+    if (!isObject(templates)) {
+        if (typeof callback === 'function') {
+            callback(new Error('Templates were not given'))
+        } else {
+            log.error('parseAndProcess was not given templates object!')
         }
 
         return false
     }
 
     if (typeof callback !== 'function') {
-        log.error('searchDir was not given callback!')
+        log.error('parseAndProcess was not given callback!')
 
         return false
     }
@@ -319,9 +347,9 @@ function searchDir(dir, callback) {
             return callback(error)
         }
 
-        let data = {}
-
         let toProcess = []
+
+        let data = {}
 
         let processNext = () => {
             if (toProcess.length === 0) {
@@ -341,10 +369,16 @@ function searchDir(dir, callback) {
 
         let searchNext = () => {
             if (list.length === 0) {
+                if (!isObject(data.templates)) {
+                    data.templates = {}
+                }
+                copyObjTo(templates, data.templates)
+
                 return processNext()
             }
 
             let item = list.pop()
+
             let name = path.basename(item, path.extname(item))
 
             fs.stat(path.join(paths.source, dir, item), (error, stats) => {
@@ -358,21 +392,13 @@ function searchDir(dir, callback) {
                     }
 
                     if (canParse(item)) {
-                        parseFile(item, (error, fileData) => {
+                        parseFile(path.join(dir, item), (error, fileData) => {
                             if (error) {
                                 return callback(error)
                             }
 
-                            if (
-                                typeof fileData === 'object' &&
-                                !Array.isArray(fileData) &&
-                                fileData !== null
-                            ) {
-                                if (
-                                    typeof data[name] !== 'object' ||
-                                    Array.isArray(data[name]) ||
-                                    data[name] === null
-                                ) {
+                            if (isObject(fileData)) {
+                                if (!isObject(data[name])) {
                                     data[name] = {}
                                 }
 
@@ -383,33 +409,29 @@ function searchDir(dir, callback) {
 
                             searchNext()
                         })
+                    } else {
+                        searchNext()
                     }
                 } else if (stats.isDirectory()) {
-                    searchDir(path.join(dir, item), (error, dirData) => {
-                        if (error) {
-                            return callback(error)
-                        }
+                    parseAndProcess(
+                        path.join(dir, item),
+                        templates,
+                        (error, dirData) => {
+                            if (error) {
+                                return callback(error)
+                            }
 
-                        if (
-                            typeof dirData === 'object' &&
-                            !Array.isArray(dirData) &&
-                            dirData !== null
-                        ) {
-                            if (
-                                typeof data[name] !== 'object' ||
-                                Array.isArray(data[name]) ||
-                                data[name] === null
-                            ) {
+                            if (!isObject(data[name])) {
                                 data[name] = {}
                             }
 
                             copyObjTo(dirData, data[name])
-                        } else {
-                            data[name] = dirData
-                        }
 
-                        searchNext()
-                    })
+                            searchNext()
+                        }
+                    )
+                } else {
+                    searchNext()
                 }
             })
         }
@@ -418,28 +440,330 @@ function searchDir(dir, callback) {
     })
 }
 
-rimraf(paths.output, error => {
-    if (error) {
-        return console.error('ERROR:', error.message || error)
+function getTemplates(dir, callback) {
+    if (typeof dir !== 'string') {
+        if (typeof callback === 'function') {
+            callback(new Error('Given directory is not a string!'))
+        } else {
+            log.error('getTemplates was not given a string directory path!')
+        }
+
+        return false
     }
 
-    console.log('Processing...')
-    searchDir('', error => {
+    if (typeof callback !== 'function') {
+        log.error('getTemplates was not given a callback!')
+
+        return false
+    }
+
+    let searchList = []
+    let templates = {}
+
+    let searchNext = () => {
+        if (searchList.length === 0) {
+            return callback(null, templates)
+        }
+
+        let item = list.pop()
+        let name = path.basename(item, path.extname(item))
+
+        fs.stat(path.join(paths.templates, dir, item), (error, stats) => {
+            if (error) {
+                return callback(error)
+            }
+
+            if (stats.isFile()) {
+                //TODO: add ability to process templates, without replacing {% %} tags
+                //(So that markdown, etc, can be used as templates)
+                fs.readFile(
+                    path.join(paths.templates, dir, item),
+                    'utf8',
+                    (error, content) => {
+                        if (error) {
+                            return callback(error)
+                        }
+
+                        templates[name] = content
+
+                        process.nextTick(searchNext)
+                    }
+                )
+            } else if (stats.isDirectory()) {
+                getTemplates(path.join(dir, item), (error, dirTemplates) => {
+                    if (error) {
+                        return callback(error)
+                    }
+
+                    templates[name] = dirTemplates
+
+                    process.nextTick(searchNext)
+                })
+            } else {
+                process.nextTick(searchNext)
+            }
+        })
+    }
+
+    fs.readdir(path.join(paths.templates, dir), (error, list) => {
         if (error) {
-            return console.error('ERROR: ', error.message || error)
+            return callback(error)
         }
 
-        if (log.log.length > 0) {
-            mkdirp(paths.output)
-
-            let fullLog = log.log.join('\n')
-            fs.writeFileSync(path.join(paths.output, 'build.log'), fullLog)
-        }
-
-        console.log('Finished!')
-
-        if (log.log.length > 0) {
-            console.log('See', path.join(paths.output, 'build.log'), 'for logs')
-        }
+        searchList = list
+        searchNext()
     })
-})
+}
+
+function addGlobal(data) {
+    data.console = console
+
+    data.path = path
+    data.fs = fs
+    data.vm = vm
+
+    data.mkdirp = mkdirp
+    data.render = render
+
+    data.paths = paths
+    data.options = options
+    data.log = log
+    data.parsers = parsers
+    data.processors = processors
+
+    data.isObject = isObject
+    data.copyObjTo = copyObjTo
+    data.canParse = canParse
+    data.canProcess = canProcess
+    data.getParser = getParser
+    data.getProcessor = getProcessor
+    data.parseFile = parseFile
+    data.processFile = processFile
+
+    data.addGlobal = addGlobal
+
+    if (typeof run !== 'function') {
+        data.run = () => {
+            log.error('|SCRIPT| run function was not present in global!')
+        }
+    } else {
+        data.run = run
+    }
+
+    if (typeof save !== 'function') {
+        data.save = () => {
+            log.error('|SCRIPT| save function was not present in global!')
+        }
+    } else {
+        data.save = save
+    }
+
+    data.scripts = scripts
+}
+
+let scriptFunctions = {
+    run: (name, data) => {
+        if (scripts.hasOwnProperty(name)) {
+            if (isObject(data)) {
+                addGlobal(data)
+                vm.createContext(data)
+
+                return vm.runInContext(scripts[name], data)
+            }
+
+            return vm.runInThisContext(scripts[name])
+        }
+    },
+    save: (data, filepath) => {
+        if (typeof data !== 'string') {
+            data = data.toString()
+        }
+        if (typeof filepath !== 'string') {
+            log.warning('|SCRIPT| save was called without string filepath!')
+            return false
+        }
+
+        try {
+            fs.writeFileSync(path.join(paths.output, filepath), data)
+        } catch (error) {
+            log.error(
+                '|SCRIPT| save was unable to write to file',
+                filepath,
+                error.message || error
+            )
+        }
+    }
+}
+
+function runScripts(data, callback) {
+    if (!isObject(data)) {
+        if (typeof callback === 'function') {
+            callback(new Error('Given data was not object!'))
+        } else {
+            log.error('runScripts was not given object data!')
+        }
+
+        return false
+    }
+
+    let scriptGlobals = {}
+    scriptGlobals.globals = scriptGlobals
+
+    if (typeof callback !== 'function') {
+        log.error('runScripts was not given callback!')
+
+        return false
+    }
+
+    let scriptData = {}
+
+    scriptData.data = {}
+
+    copyObjTo(data, scriptData.data)
+
+    addGlobal(scriptData)
+
+    scriptData.log = scriptLog
+
+    scriptData.scripts = {}
+    for (let prop in scriptFunctions) {
+        if (scriptFunctions.hasOwnProperty(prop)) {
+            scriptData[prop] = scriptFunctions[prop]
+        }
+    }
+
+    vm.createContext(scriptData)
+
+    let toRun = []
+
+    let runScripts = () => {
+        try {
+            for (let i = 0; i < toRun.length; i++) {
+                log.debug(
+                    'Running script',
+                    (i + 1).toString(),
+                    'of',
+                    toRun.length.toString()
+                )
+
+                vm.runInContext(toRun[i], scriptData)
+            }
+
+            callback()
+        } catch (error) {
+            console.trace(error)
+
+            return callback(error)
+        }
+    }
+
+    let searchDir = (dir, searchCallback = callback) => {
+        fs.readdir(path.join(paths.scripts, dir), (error, list) => {
+            if (error) {
+                return searchCallback(error)
+            }
+
+            let searchNext = () => {
+                if (list.length === 0) {
+                    return runScripts()
+                }
+
+                let item = list.pop()
+
+                fs.stat(path.join(paths.scripts, dir, item), (error, stats) => {
+                    if (error) {
+                        return searchCallback(error)
+                    }
+
+                    if (stats.isFile()) {
+                        if (path.extname(item).toLowerCase() === '.js') {
+                            let code = fs.readFileSync(
+                                path.join(paths.scripts, dir, item),
+                                'utf8'
+                            )
+
+                            if (!item.startsWith('_')) {
+                                toRun.push(code)
+                            } else {
+                                let name = path
+                                    .basename(item, path.extname(item))
+                                    .slice(1)
+
+                                scriptData.scripts[name] = code
+                            }
+                        }
+
+                        searchNext()
+                    } else if (stats.isDirectory()) {
+                        searchDir(path.join(dir, item), error => {
+                            if (error) {
+                                return searchCallback(error)
+                            }
+
+                            searchNext()
+                        })
+                    }
+                })
+            }
+
+            searchNext()
+        })
+    }
+
+    searchDir('')
+}
+
+function processSource(options) {
+    rimraf(paths.output, error => {
+        if (error) {
+            return console.trace('ERROR: ', error.message || error)
+        }
+
+        getTemplates('', (error, templates) => {
+            if (error) {
+                return console.trace('ERROR: ', error.message || error)
+            }
+
+            console.log('Processing....')
+            parseAndProcess('', templates, (error, data) => {
+                if (error) {
+                    return console.trace('ERROR: ', error.message || error)
+                }
+
+                if (!isObject(data.templates)) {
+                    data.templates = {}
+                }
+
+                copyObjTo(templates, data.templates)
+
+                runScripts(data, error => {
+                    if (error) {
+                        return console.trace('ERROR: ', error.message || error)
+                    }
+
+                    if (log.log.length > 0) {
+                        mkdirp(paths.output)
+
+                        let fullLog = log.log.join('\n')
+                        fs.writeFileSync(
+                            path.join(paths.output, 'build.log'),
+                            fullLog
+                        )
+                    }
+
+                    console.log('Finished!')
+
+                    if (log.log.length > 0) {
+                        console.log(
+                            'See',
+                            path.join(paths.output, 'build.log'),
+                            'for logs'
+                        )
+                    }
+                })
+            })
+        })
+    })
+}
+
+processSource()
