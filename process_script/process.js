@@ -9,13 +9,6 @@ const yaml = require('js-yaml')
 
 const render = require('./render')
 
-const exts = {
-    image: ['.png', '.jpg', '.jpeg', '.gif', '.bmp'],
-    markdown: ['.md', '.markdown'],
-    yaml: ['.yml', '.yaml'],
-    json: ['.json']
-}
-
 const base = path.join(__dirname, '../')
 
 const paths = {
@@ -24,11 +17,6 @@ const paths = {
     scripts: path.join(base, 'scripts/'),
     templates: path.join(base, 'templates/'),
     output: path.join(base, 'build/')
-}
-
-const cache = {
-    templates: {},
-    data: {}
 }
 
 const options = {
@@ -66,6 +54,48 @@ const log = {
     }
 }
 
+const parsers = []
+const processors = []
+const scripts = []
+
+const defaultParser = {
+    parse: (filepath, dir, file) => {
+        return { _filepath: filepath, _dir: dir, _file: file }
+    }
+}
+
+const cache = {
+    templates: {},
+    data: {}
+}
+
+//scripts
+try {
+    let dir = 'file_scripts'
+    let scriptList = fs.readdirSync(path.join(__dirname, dir))
+
+    for (let i = 0; i < scriptList.length; i++) {
+        if (fs.statSync(path.join(__dirname, dir, scriptList[i])).isFile()) {
+            let script = require('./' + dir + '/' + scriptList[i])
+
+            if (Array.isArray(script.extensions)) {
+                scripts.push(script)
+
+                if (typeof script.parse === 'function') {
+                    parsers.push(script)
+                }
+                if (typeof script.process === 'function') {
+                    processors.push(script)
+                }
+            }
+        }
+    }
+} catch (error) {
+    console.error('ERROR: unable to load file scripts', error)
+
+    return
+}
+
 function copyObjTo(obj, target) {
     for (let prop in obj) {
         if (obj.hasOwnProperty(prop)) {
@@ -82,7 +112,54 @@ function copyObjTo(obj, target) {
     }
 }
 
-function getFileData(file, callback) {
+function canParse(file) {
+    //getParser will return default parser if none are found, so all files can be parsed
+    return true
+
+    let ext = path.extname(file).toLowerCase()
+
+    for (let i = 0; i < parsers.length; i++) {
+        if (parsers[i].extensions.includes(ext)) {
+            return true
+        }
+    }
+
+    return false
+}
+function canProcess(file) {
+    let ext = path.extname(file).toLowerCase()
+
+    for (let i = 0; i < processors.length; i++) {
+        if (processors[i].extensions.includes(ext)) {
+            return true
+        }
+    }
+
+    return false
+}
+
+function getParser(file) {
+    let ext = path.extname(file).toLowerCase()
+
+    for (let i = 0; i < parsers.length; i++) {
+        if (parsers[i].extensions.includes(ext)) {
+            return parsers[i]
+        }
+    }
+
+    return defaultParser
+}
+function getProcessor(file) {
+    let ext = path.extname(file).toLowerCase()
+
+    for (let i = 0; i < processors.length; i++) {
+        if (processors[i].extensions.includes(ext)) {
+            return processors[i]
+        }
+    }
+}
+
+function parseFile(file, callback) {
     if (typeof file !== 'string') {
         if (typeof callback === 'function') {
             callback(new Error('Given file path was not a string!'))
@@ -101,86 +178,24 @@ function getFileData(file, callback) {
         return cache.data[file]
     }
 
-    try {
-        let ext = path.extname(file).toLowerCase()
-
-        let data = {}
-
-        if (exts.image.includes(ext)) {
-            data.name = path.basename(file, path.extname(file))
-        } else if (exts.markdown.includes(ext)) {
-            if (typeof callback === 'function') {
-                return fs.readFile(
-                    path.join(paths.source, file),
-                    { encoding: 'utf8' },
-                    (error, content) => {
-                        if (error) {
-                            return callback(error)
-                        }
-
-                        content = marked(content)
-                        content._filepath = file
-
-                        callback(null, content)
-                    }
-                )
-            }
-
-            let content = fs.readFileSync(path.join(paths.source, file), {
-                encoding: 'utf8'
-            })
-
-            data = marked(content)
-        } else if (exts.yaml.includes(ext)) {
-            if (typeof callback === 'function') {
-                return fs.readFile(
-                    path.join(paths.source, file),
-                    { encoding: 'utf8' },
-                    (error, content) => {
-                        if (error) {
-                            return callback(error)
-                        }
-
-                        content = yaml.safeLoad(content)
-                        content._filepath = file
-
-                        callback(null, content)
-                    }
-                )
-            }
-
-            data = yaml.safeLoad(
-                fs.readFileSync(path.join(paths.source, file), {
-                    encoding: 'utf8'
-                })
-            )
-        } else if (exts.json.includes(ext)) {
-            if (typeof callback === 'function') {
-                return fs.readFile(
-                    path.join(paths.source, file),
-                    { encoding: 'utf8' },
-                    (error, content) => {
-                        if (error) {
-                            return callback(error)
-                        }
-
-                        content = JSON.parse(content)
-                        content._filepath = file
-
-                        callback(null, content)
-                    }
-                )
-            }
-
-            let content = fs.readFileSync(path.join(paths.source, file), {
-                encoding: 'utf8'
-            })
-
-            data = JSON.parse(content)
+    if (!canParse(file)) {
+        if (typeof callback === 'function') {
+            callback(new Error('Could not find parser for ' + file))
+        } else {
+            log.warning('Could not find parser for', file)
         }
-        data._filepath = file
 
-        cache.data[file] = data
+        return ''
+    }
+
+    let parser = getParser(file)
+
+    try {
+        let data = parser.parse(
+            path.join(paths.source, file),
+            path.dirname(file),
+            path.basename(file)
+        )
 
         if (typeof callback === 'function') {
             callback(null, data)
@@ -191,118 +206,9 @@ function getFileData(file, callback) {
         if (typeof callback === 'function') {
             callback(error)
         } else {
-            log.error(
-                'getFileData was unable to parse file',
-                file,
-                error.message || error
-            )
+            log.error('Unable to parse file', file, error.message || error)
         }
     }
-
-    return {}
-}
-
-function getDirData(dir, callback) {
-    if (typeof dir !== 'string') {
-        if (typeof callback === 'function') {
-            callback(new Error('Given directory path was not a string!'))
-        } else {
-            log.error('getDirData was not given string directory path!')
-        }
-
-        return {}
-    }
-
-    if (typeof callback === 'function') {
-        fs.readdir(path.join(paths.source, dir), (error, list) => {
-            if (error) {
-                return callback(error)
-            }
-
-            let data = {}
-
-            let getNext = () => {
-                if (list.length === 0) {
-                    return callback(null, data)
-                }
-
-                let item = list.pop()
-                let name = path.basename(item, path.extname(item))
-
-                fs.stat(path.join(paths.source, dir, item), (error, stats) => {
-                    if (error) {
-                        return callback(error)
-                    }
-
-                    if (typeof data[name] !== 'object') {
-                        data[name] = {}
-                    }
-
-                    if (stats.isFile()) {
-                        getFileData(path.join(dir, item), (error, fileData) => {
-                            if (error) {
-                                return callback(error)
-                            }
-
-                            copyObjTo(fileData, data[name])
-
-                            getNext()
-                        })
-                    } else {
-                        getDirData(path.join(dir, item), (error, dirData) => {
-                            if (error) {
-                                return callback(error)
-                            }
-
-                            copyObjTo(dirData, data[name])
-
-                            data[name] = dirData
-
-                            getNext()
-                        })
-                    }
-                })
-            }
-
-            getNext()
-        })
-    } else {
-        try {
-            let list = fs.readdirSync(path.join(paths.source, dir))
-
-            let data = {}
-
-            for (let i = 0; i < list.length; i++) {
-                let stats = fs.statSync(path.join(paths.source, dir, list[i]))
-
-                if (typeof data[list[i]] !== 'object') {
-                    data[list[i]] = {}
-                }
-
-                if (stats.isFile()) {
-                    copyObjTo(
-                        getFileData(path.join(dir, list[i])),
-                        data[list[i]]
-                    )
-                } else {
-                    copyObjTo(
-                        getDirData(path.join(dir, list[i])),
-                        data[list[i]]
-                    )
-                }
-            }
-
-            return data
-        } catch (error) {
-            log.error(
-                'getDirData was unable to parse directory',
-                dir,
-                error.message || error
-            )
-        }
-    }
-
-    return {}
 }
 
 function processFile(file, data, callback) {
@@ -330,125 +236,195 @@ function processFile(file, data, callback) {
         return log.error('processFile was not given callback function!')
     }
 
-    let ext = path.extname(file).toLowerCase()
+    if (!canProcess(file)) {
+        callback(new Error('Could not find processor for ' + file))
 
-    if (ext === '.html') {
-        log.info('Processing', file)
+        return false
+    }
 
-        fs.readFile(
-            path.join(paths.source, file),
-            {
-                encoding: 'utf8'
-            },
-            (error, content) => {
-                if (error) {
-                    return callback(error)
-                }
+    let processor = getProcessor(file)
 
-                try {
-                    content = render(content, data)
+    try {
+        let filepath = path.join(paths.source, file)
 
-                    let outputDir = path.join(
-                        path.dirname(file),
-                        path.basename(file, path.extname(file))
-                    )
+        let dir = path.dirname(file)
+        file = path.basename(file)
 
-                    if (path.basename(file, path.extname(file)) === 'index') {
-                        outputDir = path.dirname(file)
+        log.debug('Processing', path.join(dir, file))
+
+        let processed = processor.process(
+            filepath,
+            dir,
+            file,
+
+            data
+        )
+
+        if (processed.hasOwnProperty('data')) {
+            if (typeof processed.dir === 'string') {
+                dir = processed.dir
+            }
+            if (typeof processed.file === 'string') {
+                file = processed.file
+            }
+
+            if (typeof processed.data !== 'string') {
+                processed.data = processed.data.toString()
+            }
+
+            mkdirp(path.join(paths.output, dir))
+
+            fs.writeFile(
+                path.join(paths.output, dir, file),
+                processed.data,
+                'utf8',
+                error => {
+                    if (error) {
+                        return callback(error)
                     }
 
-                    mkdirp(path.join(paths.output, outputDir))
-
-                    fs.writeFile(
-                        path.join(paths.output, outputDir, 'index.html'),
-                        content,
-                        error => {
-                            if (error) {
-                                return callback(error)
-                            }
-
-                            callback()
-                        }
-                    )
-                } catch (error) {
-                    callback(error)
+                    callback()
                 }
-            }
-        )
-    } else {
-        return callback(null)
+            )
+        } else {
+            callback(
+                new Error('Proccessor did not return data property for ' + file)
+            )
+            return false
+        }
+    } catch (error) {
+        callback(error)
     }
 }
 
-function processDir(dir, callback) {
+function searchDir(dir, callback) {
     if (typeof dir !== 'string') {
         if (typeof callback === 'function') {
-            callback(new Error('Given dir was not a string!'))
+            callback(new Error('Given directory path was not a string!'))
         } else {
-            log.error('processDir was not given string directory path!')
+            log.error('searchDir was not given string directory path!')
         }
 
         return false
     }
 
     if (typeof callback !== 'function') {
-        return log.error('processDir was not given callback function!')
+        log.error('searchDir was not given callback!')
+
+        return false
     }
 
-    getDirData(dir, (error, data) => {
+    fs.readdir(path.join(paths.source, dir), (error, list) => {
         if (error) {
             return callback(error)
         }
 
-        fs.readdir(path.join(paths.source, dir), (error, list) => {
-            if (error) {
-                return callback(error)
+        let data = {}
+
+        let toProcess = []
+
+        let processNext = () => {
+            if (toProcess.length === 0) {
+                return callback(null, data)
             }
 
-            let processNext = () => {
-                if (list.length === 0) {
-                    return callback(null)
+            let item = toProcess.pop()
+
+            processFile(path.join(dir, item), data, error => {
+                if (error) {
+                    return callback(error)
                 }
 
-                let item = list.pop()
+                processNext()
+            })
+        }
 
-                fs.stat(path.join(paths.source, dir, item), (error, stats) => {
-                    if (error) {
-                        return callback(error)
-                    }
-
-                    if (stats.isFile()) {
-                        processFile(path.join(dir, item), data, error => {
-                            if (error) {
-                                return callback(error)
-                            }
-
-                            processNext()
-                        })
-                    } else {
-                        processDir(path.join(dir, item), error => {
-                            if (error) {
-                                return callback(error)
-                            }
-
-                            processNext()
-                        })
-                    }
-                })
+        let searchNext = () => {
+            if (list.length === 0) {
+                return processNext()
             }
 
-            processNext()
-        })
+            let item = list.pop()
+            let name = path.basename(item, path.extname(item))
+
+            fs.stat(path.join(paths.source, dir, item), (error, stats) => {
+                if (error) {
+                    return callback(error)
+                }
+
+                if (stats.isFile()) {
+                    if (canProcess(item)) {
+                        toProcess.push(item)
+                    }
+
+                    if (canParse(item)) {
+                        parseFile(item, (error, fileData) => {
+                            if (error) {
+                                return callback(error)
+                            }
+
+                            if (
+                                typeof fileData === 'object' &&
+                                !Array.isArray(fileData) &&
+                                fileData !== null
+                            ) {
+                                if (
+                                    typeof data[name] !== 'object' ||
+                                    Array.isArray(data[name]) ||
+                                    data[name] === null
+                                ) {
+                                    data[name] = {}
+                                }
+
+                                copyObjTo(fileData, data[name])
+                            } else {
+                                data[name] = fileData
+                            }
+
+                            searchNext()
+                        })
+                    }
+                } else if (stats.isDirectory()) {
+                    searchDir(path.join(dir, item), (error, dirData) => {
+                        if (error) {
+                            return callback(error)
+                        }
+
+                        if (
+                            typeof dirData === 'object' &&
+                            !Array.isArray(dirData) &&
+                            dirData !== null
+                        ) {
+                            if (
+                                typeof data[name] !== 'object' ||
+                                Array.isArray(data[name]) ||
+                                data[name] === null
+                            ) {
+                                data[name] = {}
+                            }
+
+                            copyObjTo(dirData, data[name])
+                        } else {
+                            data[name] = dirData
+                        }
+
+                        searchNext()
+                    })
+                }
+            })
+        }
+
+        searchNext()
     })
 }
 
-console.log('Processing...')
 rimraf(paths.output, error => {
     if (error) {
         return console.error('ERROR:', error.message || error)
     }
 
-    processDir('', error => {
+    console.log('Processing...')
+    searchDir('', error => {
         if (error) {
             return console.error('ERROR: ', error.message || error)
         }
