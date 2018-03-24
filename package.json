@@ -2,7 +2,7 @@
     "name": "brettdoyle.art",
     "version": "0.0.1",
     "scripts": {
-        "update-build": "node build_script/process.js"
+        "update-build": "node process_script/process.js"
     },
     "dependencies": {
         "ejs": "^2.5.7",
