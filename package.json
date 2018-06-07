@@ -2,13 +2,9 @@
     "name": "brettdoyle.art",
     "version": "0.0.1",
     "scripts": {
-        "update-build": "node process_script/process.js"
+        "update-build": "node build.js"
     },
     "dependencies": {
-        "ejs": "^2.5.7",
-        "js-yaml": "^3.10.0",
-        "marked": "^0.3.16",
-        "mkdirp": "^0.5.1",
-        "rimraf": "^2.6.2"
+        "builder": "file:builder"
     }
 }
