@@ -1,6 +1,5 @@
 const vm = require('vm')
 
-//TODO: allow {% %} inside commands...
 const commandRe = new RegExp(/({%[\s\S]*?(?=%})%})/, 'gm')
 
 function render(string, data = global, callback) {
