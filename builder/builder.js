@@ -269,6 +269,8 @@ let _tree = {
                     obj[name] = this.files[i].content
                 }
 
+                obj.files = this.files.map(file => file.filename)
+
                 return obj
             }
         },
