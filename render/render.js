@@ -12,6 +12,7 @@ function render(string, data = global) {
         shallowDataCopy[prop] = data[prop]
     }
     shallowDataCopy.render = render
+    shallowDataCopy.output = ''
 
     const vm = require('vm')
 
@@ -24,10 +25,21 @@ function render(string, data = global) {
             rendered += parts[i]
         } else {
             try {
-                rendered += vm.runInContext(
+                shallowDataCopy.output = ''
+
+                let codeReturnValue = vm.runInContext(
                     parts[i].substring(2, parts[i].length - 2),
                     shallowDataCopy
                 )
+
+                if (
+                    typeof shallowDataCopy.output === 'string' &&
+                    shallowDataCopy.output.length > 0
+                ) {
+                    rendered += shallowDataCopy.output
+                } else {
+                    rendered += codeReturnValue
+                }
             } catch (error) {
                 rendered +=
                     '[Error! ' +
