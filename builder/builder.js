@@ -8,9 +8,14 @@ const imageSize = require('image-size')
 
 const render = require('render')
 
+let defaultOptions = {
+    source: 'source',
+    output: 'build'
+}
+
 let _tree = {
     fileContentCache: {},
-    baseDir: process.cwd(),
+    baseDirectory: process.cwd(),
 
     fileParsers: [
         {
@@ -92,7 +97,7 @@ let _tree = {
         }
     ],
 
-    getObjDir: function() {
+    getItemDirectory: function() {
         if (this.folder) {
             return path.join(this.folder.directory, this.folder.name)
         }
@@ -167,7 +172,7 @@ let _tree = {
         }
 
         Object.defineProperty(fileObject, 'sourcePath', {
-            value: path.join(_tree.baseDir, directory, file),
+            value: path.join(_tree.baseDirectory, directory, file),
 
             enumerable: true,
             configurable: false,
@@ -175,7 +180,7 @@ let _tree = {
         })
 
         Object.defineProperty(fileObject, 'directory', {
-            get: _tree.getObjDir.bind(fileObject),
+            get: _tree.getItemDirectory.bind(fileObject),
 
             enumerable: true
         })
@@ -280,7 +285,7 @@ let _tree = {
         })
 
         Object.defineProperty(folderObject, 'directory', {
-            get: _tree.getObjDir.bind(folderObject),
+            get: _tree.getItemDirectory.bind(folderObject),
 
             enumerable: true
         })
@@ -305,8 +310,27 @@ let _tree = {
     }
 }
 
-function getDirTree(baseDir, directory, callback) {
-    fs.readdir(path.join(baseDir, directory), (error, list) => {
+function checkOptions(options) {
+    if (
+        Array.isArray(options) ||
+        options === null ||
+        typeof options !== 'object'
+    ) {
+        options = {}
+    }
+
+    if (typeof options.source !== 'string') {
+        options.source = defaultOptions.source
+    }
+    if (typeof options.output !== 'string') {
+        options.output = defaultOptions.output
+    }
+
+    return options
+}
+
+function buildDirectoryTree(baseDirectory, directory, callback) {
+    fs.readdir(path.join(baseDirectory, directory), (error, list) => {
         if (error) {
             return callback(error)
         }
@@ -314,31 +338,34 @@ function getDirTree(baseDir, directory, callback) {
         let tree = _tree.getFolder(directory)
 
         function addToTree(item, callback) {
-            fs.stat(path.join(baseDir, directory, item), (error, stats) => {
-                if (error) {
-                    return callback(error)
-                }
+            fs.stat(
+                path.join(baseDirectory, directory, item),
+                (error, stats) => {
+                    if (error) {
+                        return callback(error)
+                    }
 
-                if (stats.isDirectory()) {
-                    getDirTree(
-                        baseDir,
-                        path.join(directory, item),
-                        (error, subDirTree) => {
-                            if (error) {
-                                return callback(error)
+                    if (stats.isDirectory()) {
+                        buildDirectoryTree(
+                            baseDirectory,
+                            path.join(directory, item),
+                            (error, subDirTree) => {
+                                if (error) {
+                                    return callback(error)
+                                }
+
+                                tree.addFolder(subDirTree)
+
+                                callback()
                             }
+                        )
+                    } else {
+                        tree.add(item)
 
-                            tree.addFolder(subDirTree)
-
-                            callback()
-                        }
-                    )
-                } else {
-                    tree.add(item)
-
-                    callback()
+                        callback()
+                    }
                 }
-            })
+            )
         }
 
         async.each(list, addToTree, error => {
@@ -351,19 +378,19 @@ function getDirTree(baseDir, directory, callback) {
     })
 }
 
-function writeTree(baseDir, tree, callback) {
-    fs.mkdirs(path.join(baseDir, tree.directory, tree.name), error => {
+function saveDirectoryTree(baseDirectory, tree, callback) {
+    fs.mkdirs(path.join(baseDirectory, tree.directory, tree.name), error => {
         if (error) {
             return callback(error)
         }
 
         function writeSubTree(subTree, callback) {
-            writeTree(baseDir, subTree, callback)
+            saveDirectoryTree(baseDirectory, subTree, callback)
         }
 
         function saveFileOutput(file, output, callback) {
             let fullDirectory = path.join(
-                baseDir,
+                baseDirectory,
                 typeof output.directory === 'string'
                     ? output.directory
                     : file.directory
@@ -438,27 +465,34 @@ function writeTree(baseDir, tree, callback) {
     })
 }
 
-module.exports = function build() {
-    let source = path.join(process.cwd(), 'source')
-    _tree.baseDir = source
+module.exports = function build(directory = process.cwd(), options = {}) {
+    if (!path.isAbsolute(directory)) {
+        directory = process.cwd()
+    }
 
-    getDirTree(source, '', (error, tree) => {
+    options = checkOptions(options)
+
+    _tree.baseDirectory = options.source
+
+    buildDirectoryTree(options.source, '', (error, tree) => {
         if (error) {
             return console.error(error)
         }
 
-        fs.emptyDir(path.join(process.cwd(), 'build'), error => {
+        fs.emptyDir(path.join(directory, options.output), error => {
             if (error) {
                 return console.error(error)
             }
 
-            writeTree(path.join(process.cwd(), 'build'), tree, error => {
-                if (error) {
-                    return console.error(error)
+            saveDirectoryTree(
+                path.join(directory, options.output),
+                tree,
+                error => {
+                    if (error) {
+                        return console.error(error)
+                    }
                 }
-
-                console.log('Finished')
-            })
+            )
         })
     })
 }
