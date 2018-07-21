@@ -1,1 +1,1 @@
-I'm {% info.name %}, a student 3D artist.
+I'm {% info.name %}, a 3D artist.
