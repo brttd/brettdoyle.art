@@ -5,6 +5,8 @@ const path = require('path')
 const marked = require('marked')
 const yaml = require('js-yaml')
 const imageSize = require('image-size')
+const htmlMinifier = require('html-minifier')
+const uglifyJS = require('uglify-js')
 
 const render = require('render')
 
@@ -62,7 +64,29 @@ let _tree = {
     ],
     fileProcessors: [
         {
-            extensions: ['.html', '.md', '.markdown', '.js', '.txt'],
+            extensions: ['.html'],
+            process: (file, data) => {
+                return {
+                    content: htmlMinifier.minify(render(file.content, data), {
+                        collapseWhitespace: true,
+                        collapseInlineTagWhitespace: true,
+
+                        minifyCSS: true,
+                        minifyJS: true
+                    })
+                }
+            }
+        },
+        {
+            extensions: ['.js'],
+            process: (file, data) => {
+                return {
+                    content: uglifyJS.minify(render(file.content))
+                }
+            }
+        },
+        {
+            extensions: ['.md', '.markdown', '.txt'],
             process: (file, data) => {
                 return {
                     content: render(file.content, data)
