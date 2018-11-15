@@ -21,7 +21,7 @@ body {
     }
 }
 
-$high_color: hsl(120, 100%, 30%);
+$high_color: hsl(123, 42%, 58%);
 $high_color_trans: hsla(120, 100%, 30%, 0.6);
 
 .main {
@@ -84,10 +84,20 @@ section {
         padding: 0.2em 0.3em;
         text-decoration: none;
 
-        &:hover {
+        &:hover,
+        &:focus {
             color: white;
             text-decoration: underline;
             background: $high_color_trans;
+        }
+
+        &:focus {
+            outline: 2px solid white;
+
+            outline-offset: -4px;
+        }
+        &:active {
+            color: black;
         }
     }
     .email a {
@@ -209,6 +219,15 @@ $landscape_video_width: 60vw;
             }
         }
         &:focus {
+            outline: 0.2em solid $high_color;
+
+            z-index: 2;
+        }
+        &:active {
+            span {
+                background: $high_color;
+                color: white;
+            }
         }
     }
 }
