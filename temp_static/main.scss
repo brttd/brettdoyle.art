@@ -59,13 +59,17 @@ section {
 
     h1,
     p,
-    span {
+    span,
+    ul {
         font-family: 'Dosis';
 
         margin: 0;
         margin-bottom: 1em;
 
         padding: 0 0.5em;
+
+        width: fit-content;
+        max-width: 25em;
     }
     .name {
         font-size: 2em;
@@ -107,8 +111,6 @@ section {
     }
 
     .links {
-        margin: 0;
-        margin-bottom: 1em;
         padding: 0;
         padding-bottom: 0.2em;
 
