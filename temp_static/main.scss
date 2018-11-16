@@ -266,7 +266,18 @@ $landscape_video_width: 60vw;
     }
     .bio {
         text-align: center;
-        max-width: 37em;
+        max-width: 100%;
+
+        h1,
+        p,
+        span,
+        ul {
+            margin: 0 auto;
+            margin-bottom: 1em;
+        }
+        .link-text {
+            margin: 0 auto;
+        }
     }
     .reel {
         width: 100%;
