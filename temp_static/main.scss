@@ -218,9 +218,13 @@ $portfolio_vertical_padding: 0.5em;
         width: 25%;
         max-width: 400px;
 
+        min-height: 3em;
+
         img {
             display: block;
             max-width: 100%;
+
+            height: auto;
 
             opacity: 0.8;
         }
