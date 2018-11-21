@@ -6,18 +6,17 @@ html {
     min-height: 100%;
 }
 
-body {
+html {
     color: black;
+    background: white;
 
     font-size: 17px;
-    font-size: calc(14px + 1.5vmin);
+    font-size: calc(14px + 1.2vmin);
     font-family: 'Dosis', sans-serif;
-
-    background: white;
 }
 
-@media (min-width: 1000px) and (min-height: 1000px) {
-    body {
+@media (min-width: 1250px) and (min-height: 1250px) {
+    html {
         font-size: 29px;
     }
 }
