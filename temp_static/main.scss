@@ -145,19 +145,26 @@ $portfolio_vertical_padding: 0.5em;
     padding: $portfolio_vertical_padding 0;
 }
 
-.reel {
+#reel {
     width: 100%;
     max-width: 1920px;
 
     height: $landscape_video_width * (9/16);
     max-height: 1080px;
 
+    background: rgba(0, 0, 0, 0.4);
+
+    noscript {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
     iframe {
         border: none;
 
         width: 100%;
         height: 100%;
-        flex: 1 1 auto;
     }
 }
 
@@ -165,7 +172,7 @@ $portfolio_vertical_padding: 0.5em;
     .portfolio {
         max-width: 1920px;
     }
-    .reel {
+    #reel {
         max-height: 1080px;
     }
 }
@@ -177,7 +184,7 @@ $portfolio_vertical_padding: 0.5em;
             #{100vh * (16 / 9)} - #{$portfolio_vertical_padding * 2}
         );
     }
-    .reel {
+    #reel {
         max-height: 100vh;
         max-height: calc(100vh - #{$portfolio_vertical_padding * 2});
     }
@@ -315,7 +322,7 @@ $portfolio_vertical_padding: 0.5em;
         padding: 0;
         max-width: 1920px;
 
-        .reel {
+        #reel {
             width: 100%;
             max-width: 100vw;
             height: 100vw * (9/16);
@@ -330,7 +337,7 @@ $portfolio_vertical_padding: 0.5em;
 }
 
 @media (min-width: 1920px) and (orientation: portrait) {
-    .reel {
+    #reel {
         max-width: 1920px;
         max-height: 1080px;
     }

@@ -69,8 +69,9 @@ I recently finished studying with CGSpectrum, in their <a href="https://www.cgsp
 
 </section>
 <div class="portfolio">
-<section class="reel">
-<iframe
+<section id="reel">
+<noscript id="iframe_noscript">
+    <iframe
     width="560"
     height="315"
     src="https://www.youtube.com/embed/UTw7mqRaBzw?modestbranding=1"
@@ -78,6 +79,7 @@ I recently finished studying with CGSpectrum, in their <a href="https://www.cgsp
     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen
 ></iframe>
+</noscript>
 </section>
 <section class="artstation">
 <h2>Portfolio</h2>
@@ -163,6 +165,21 @@ script.onload = function() {
 }
 
 document.body.appendChild(script)
+</script>
+<script>
+window.onload = function() {
+var frame = document.createElement('iframe')
+frame.setAttribute('width', '560')
+frame.setAttribute('height', '315')
+frame.setAttribute('frameborder', '0')
+frame.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture')
+frame.setAttribute('allowfullscreen', '')
+frame.src = 'https://www.youtube.com/embed/UTw7mqRaBzw?modestbranding=1'
+
+var reel = document.getElementById('reel')
+reel.appendChild(frame)
+reel.removeChild(document.getElementById('iframe_noscript'))
+}
 </script>
 </body>
 </html>
