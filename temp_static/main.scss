@@ -46,15 +46,33 @@ section {
     box-sizing: border-box;
 }
 
-.bio {
-    display: inline-block;
+#bio_wrapper {
     display: inline-flex;
 
     flex: 0 0 auto;
-    flex-flow: column nowrap;
+
+    align-self: start;
+
+    align-self: stretch;
+    min-height: max-content;
+
+    max-height: 100%;
+    max-height: 100vh;
+}
+@media (orientation: landscape) and (min-width: 800px) and (min-height: 28em) {
+    #bio_wrapper {
+        position: sticky;
+        top: 0;
+    }
+}
+.bio {
+    display: inline-block;
 
     max-width: 37vw;
     min-width: 14em;
+
+    max-height: 100%;
+    //max-height: 100vh;
 
     padding: 0.4em 0.2em;
 
@@ -62,6 +80,7 @@ section {
     p,
     span,
     ul {
+        display: block;
         font-family: 'Dosis';
 
         margin: 0;
