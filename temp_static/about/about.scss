@@ -1,0 +1,159 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+
+    min-height: 100%;
+}
+
+html {
+    color: 'black';
+    background: 'white';
+
+    font-size: 17px;
+    font-size: calc(14px + 1.2vmin);
+    font-family: 'Dosis', sans-serif;
+}
+
+@media (min-width: 1250px) and (min-height: 1250px) {
+    html {
+        font-size: 29px;
+    }
+}
+
+$high_color: hsl(123, 42%, 58%);
+$high_color_trans: hsla(120, 100%, 30%, 0.6);
+
+body {
+    display: flex;
+    flex-flow: column nowrap;
+
+    justify-content: center;
+    align-items: center;
+
+    min-width: 10em;
+
+    padding: 0.6em;
+    padding: calc(0.6em + 1.5vmin);
+}
+
+section {
+    max-width: 100%;
+}
+
+h1,
+p,
+span {
+    display: block;
+    max-width: 40em;
+
+    margin: 0;
+    margin-bottom: 1em;
+    padding: 0.2em;
+}
+h1 {
+    margin-bottom: 0.5em;
+}
+span {
+    margin-bottom: 0;
+}
+p {
+    white-space: pre-wrap;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+
+    li {
+        display: inline-block;
+        padding: 0.2em;
+    }
+}
+a {
+    display: inline-block;
+
+    color: black;
+    font-weight: bold;
+
+    margin: -0.2em -0.3em;
+    padding: 0.2em 0.3em;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+        color: white;
+        text-decoration: underline;
+        background: $high_color_trans;
+    }
+
+    &:focus {
+        outline: 2px solid white;
+
+        outline-offset: -4px;
+    }
+    &:active {
+        color: black;
+    }
+}
+
+.profile {
+    display: flex;
+    flex-flow: row nowrap;
+
+    max-width: 40em;
+}
+.image,
+.desc {
+    display: inline-block;
+    vertical-align: top;
+
+    box-sizing: border-box;
+}
+
+.desc {
+    padding-right: 1em;
+}
+
+.image {
+    align-self: center;
+
+    margin-right: 1em;
+    margin-bottom: 1em;
+
+    width: 10em;
+    max-width: 50%;
+    height: auto;
+
+    img {
+        display: inline-block;
+
+        width: 100%;
+
+        border-radius: 100%;
+
+        transform: scale(1);
+        filter: sepia(0%) hue-rotate(0) saturate(100%);
+
+        transition: filter 0.8s, transform 0.2s;
+
+        &:hover,
+        &:active {
+            filter: sepia(100%) hue-rotate(70deg) saturate(150%);
+            transform: scale(1.1);
+        }
+    }
+}
+
+@media (orientation: portrait) and (max-width: 800px) {
+    .profile {
+        flex-flow: column nowrap;
+    }
+    .image {
+        display: block;
+
+        margin: 0 auto;
+    }
+}

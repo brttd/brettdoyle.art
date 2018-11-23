@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Brett Doyle | About</title>
+
+        <meta name="description" content="Brett Doyle, 20 year old 3D artist in London.">
+        <meta name="author" content="Brett Doyle">
+
+        <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+
+        <meta id="theme-color" name="theme-color" content="hsl(123, 42%, 58%)">
+        <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett">
+
+        <link href="about.css" rel="stylesheet" />
+        <style>
+@font-face {
+    font-family: 'Dosis';
+    
+    font-display: fallback;
+
+
+    src: url('/fonts/Dosis.eot');
+    src: url('/fonts/Dosis.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Dosis.woff2') format('woff2'),
+        url('/fonts/Dosis.woff') format('woff'),
+        url('/fonts/Dosis.ttf') format('truetype'),
+        url('/fonts/Dosis.svg#dosisregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+</style>
+    </head>
+<body>
+<canvas
+    id="canvas"
+    style="position: fixed; top: 0; left: 0; z-index: -1; opacity: 0; transition: opacity 1s"
+></canvas>
+<section>
+<div class="profile"><div class="image" alt="My face"><img src="brett.jpg"></div><div class="desc">
+<h1>Brett Doyle</h1>
+<p>I'm a 20 year old 3D artist, currently living in London and looking for work as a Modeller in the Film/VFX industry, or environment/prop/modelling/texturing artist in the game industry</p>
+</div>
+</div>
+<p>I've been doing 3D modelling since 2013. I first got interested in it while making custom maps &amp; models for a game I used to play. Since then I've learnt and experimented with many different 3D tools &amp; software (starting with 3DS Max), and also learnt a few programming languages which I've used for both 3D &amp; 2D creative coding (as well as some web design &amp; software tools).
+From the start I've wanted to use digital 3D as a artistic medium, and have studied to improve my artistic and technical ability. I most enjoy digital sculpture, and am inspired by artists such as Simon Stålenhag, Conrad Roset, and Pascal Blanché.
+My spare time is spent drawing, coding, and reading (mainly science fiction).
+
+I was home-schooled for most of my education, and in 2017 started studying with CG Spectrum, doing their Advanced 3D Modelling course. I finished in November 2018, during my time with CG Spectrum I learnt character &amp; creature sculpting and greatly improved previously self-taught modelling &amp; texturing skills.</p>
+<span>Some of the work I did while at CG Spectrum can be seen on my ArtStation, and my programming projects are on GitHub.</span>
+<ul class="links">
+<li><a href="/">Home</a></li>
+<li><a href="/resume">Resume</a></li>
+<li><a href="https://www.artstation.com/brettd" target="_blank" rel="noopener">ArtStation</a></li>
+<li><a href="https://github.com/brttd" target="_blank" rel="noopener">GitHub</a></li>
+</ul>
+</section>
+<script>
+if (!Date.now) {
+    Date.now = function now() {
+        return new Date().getTime()
+    }
+}
+
+var background_scripts = [
+    'shiftingTriangleGrid',
+    'flowingArcs',
+    'pixelGrid'
+]
+
+var canvas = document.getElementById('canvas')
+var ctx = canvas.getContext('2d')
+
+var min_light = 92
+var max_light = 98
+
+var grey = 'hsl(0, 0%, ' + 96 + '%)'
+
+var w = 0
+var h = 0
+
+var retain_on_resize = false
+var temp_image_data = false
+
+function updateCanvasSize() {
+    if (retain_on_resize) {
+        temp_image_data = ctx.getImageData(0, 0, w, h)
+    }
+
+    w = canvas.width = window.innerWidth
+    h = canvas.height = window.innerHeight
+
+    if (retain_on_resize) {
+        ctx.putImageData(temp_image_data, 0, 0)
+        temp_image_data = false
+    }
+
+    if (typeof onCanvasSizeChange == 'function') {
+        onCanvasSizeChange()
+    }
+}
+
+w = canvas.width = window.innerWidth
+h = canvas.height = window.innerHeight
+
+window.addEventListener('resize', updateCanvasSize)
+
+var script = document.createElement('script')
+script.src =
+    '/backgrounds/' +
+    background_scripts[
+        Math.round(Math.random() * (background_scripts.length - 1))
+    ] +
+    '.js'
+
+script.onload = function() {
+    //only display the background once the script has started running
+    canvas.style.opacity = '1'
+}
+
+document.body.appendChild(script)
+</script>
+</body>
+</html>
