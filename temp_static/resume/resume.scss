@@ -67,6 +67,7 @@ ul {
 }
 
 #info {
+    margin-bottom: 0.6em;
     padding: 0.4em 0;
     padding-bottom: 0;
 
@@ -104,6 +105,12 @@ ul {
             p {
                 font-size: 0.85em;
             }
+        }
+
+        .note {
+            font-weight: 300;
+            font-size: 0.9em;
+            color: rgba(0, 0, 0, 0.6);
         }
 
         p {
@@ -171,6 +178,7 @@ ul {
             display: inline-block;
 
             margin-right: 1.5em;
+            margin-bottom: 0.4em;
 
             &::before {
                 display: inline-block;
@@ -276,5 +284,10 @@ ul {
             transparent #{$line_width + $line_spacing}
         );
         background-position: center;
+    }
+}
+@media not print {
+    body {
+        min-height: 297mm;
     }
 }
