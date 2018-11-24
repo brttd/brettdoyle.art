@@ -1,3 +1,5 @@
 /résumé /resume 200
 
+/display-whisper* https://display-whisper.brettdoyle.art:splat 200
+
 /proxy/* https://:splat 200
