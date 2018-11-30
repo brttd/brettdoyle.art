@@ -1,5 +1,8 @@
 /résumé /resume 200
 
+/showreel* /reel:splat 200
+/demoreel* /reel:splat 200
+
 /display-whisper* https://display-whisper.brettdoyle.art/:splat 302
 
 /proxy/* https://:splat 200
