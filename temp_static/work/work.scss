@@ -157,6 +157,32 @@ a {
 
         overflow: hidden;
 
+        &.image {
+            .image-container {
+                position: relative;
+
+                height: 0;
+                padding-top: 56.25%;
+
+                background: hsl(0, 0%, 90%);
+                background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAAtCAYAAADydghMAAAE00lEQVRoQ+2aTWgkRRTH/286iYgHD5mBXS8eBFFQWXGVFSGT6onk4Ip6cMCTgi4eZFFXV9wY/Fh2jRhX/MCD+LWe1LlocD0EZ6bGgBg0sosuRJA9eNFAzyB7EGFi95MXqkPZ6U5Pkp5JNmNDSNJdH+9Xr+rVe6+KkPBUKpWh4eHhA0S0H8B+IroNwDVJ5bf5/QVm/h7AAjMvtFqt+XK53I6TieJeNhqNW5n5YwDXbzPIZrtfJKIHR0dHf4g28B9g0WqhUHgewLMAnM32tkPq+QBe8TzvuK3tVWAD+w2AAztE4KzEmPc8rxhCrwJrrU8AeC6mlxlmrgP4cXl5+dz4+PhfWUmSRTuzs7NXDA4O7gNwCxG5AO6JafekUmpS3q8AmzX7XWQaLzHzI67rfpWFYL1qo16v30VE7wPYY/XpE9HtsqbJTOVzEQO1BOBGpVSzV4Jm2Y/WOg/g5wj0oud5+0hrfS+Az+0OmfngTtBsrVYbyeVyR2VbNPItBEEwXSqV5tIGyGj6TKTcfQL8EYCHrA8zSikZhG19tNZiT8SuxD2TSqmTaQJqrb+IrOnTAiyqv8GqfKdSqprWWDe/G83KjgFmnnYc5z352/f9Q0QkGkcQBMU0TWutxwB8bcl6XoBlnQ6HLx3HuWpkZOSPbgKlta21/hLAQYF1XfcZu3yj0TjFzEcAnFFK3b1eW3Nzc3t93//dKtMSYLYreZ43UC6XZdPetkdrLQO+J5fLXVssFn+1BdFaXwdgEcCSUmrvekJWKhWnUCj8Y5dZA6yUinU3e0mfFbDIHFVo14GNtZw26/FoJ9Y/qyndU2Az9d4GIIbDfsQgHlZK/ZI0a6JGi4g+lLJEdMis346MVk+AZdMnopeY+VHjuV1kZglIBohIfl8pBpeI3mXmF5Kcmyy2pa4Ci4HI5/OPGSix+mugYgajxczHm83mO3GGciuORzh7urKGzX73luWeVn3ff2psbOynuGlbrVZvchznlDXdzwN4shv7f6bA9Xr9DiJ60RL8AoCnlVLi4aQ+xq19zcqkVIloIi5wT20soUCmwFpr2eMkUSD79gnP815OSq0kCWyClwkAEr6ttKWUGtgsYLRe1sC20yLrcaLZbH7QqeNi1v3DYuTsyCZLX6CbwOHgng2C4Ik0P9cYpDcA3GwqzofZlksNOASfCYLg8VKp9Js9zWq12tVENEVED5j3EnuLwfo01MalCiw8fwN4vd1uT8k/Q0NDxwCI43+5+fZqu92eDtNGuwE4VO6fEtGFURkzf8LMx6La303Aq+ubmQ+7rvttnBXedcBpoeeuA04zRrsOuO80/D+wZbns/FPa1N+I25m1pxX60h3JEKdh40tLJlJ+JFZOzVV11JkplCmwcQ8/i2T4E+XxPO8yO7iIiZZmJPEeTdxtBHDDwUPaOovrvF6vHyEiSZqLB5UK3Kt4OClrmUleWqZmPp8/bfnIa8Al5x0EwaSV/lk347EVzUrdpLx0picPEhzkcjk5qwqjIFvui1ZO601mnurmgV3SyUNXzpYSji0FPjVruVXNhvWTzpa6enposo8rB+3MfH8neeksgBNPD/vufFhGs69uAFjzvX/ueAh0393isaD7456WbRn75iaeDR1z11LuQu3Uq4iLzCw3kVLvWv4Lc9OMCx0Xi24AAAAASUVORK5CYII=');
+                background-position: center;
+                background-repeat: no-repeat;
+                //position: absolute;
+                //top: 0;
+                //left: 0;
+                //right: 0;
+                //margin-top: -56.25%;
+
+                .images,
+                img {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                }
+            }
+        }
+
         img,
         iframe {
             display: block;
@@ -227,6 +253,8 @@ a {
         .images {
             position: relative;
             z-index: 1;
+
+            width: 100%;
 
             img {
                 display: none;
