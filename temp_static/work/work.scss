@@ -140,6 +140,8 @@ a {
     .content {
         width: 100%;
 
+        overflow: hidden;
+
         img,
         iframe {
             display: block;
@@ -153,19 +155,38 @@ a {
 
         .info {
             position: relative;
-            min-height: 1.4em;
         }
 
         .description {
             position: absolute;
-            top: 0;
+            top: -1.4em;
             right: 0;
 
-            padding: 0.2em;
+            z-index: 3;
 
+            padding: 0.2em 0.3em;
+            padding-right: 0.6em;
+
+            line-height: 1.1;
             text-align: right;
             font-size: 0.8em;
             font-style: italic;
+
+            background: white;
+
+            transition: top 0.3s;
+        }
+
+        &.youtube,
+        &.sketchfab {
+            &:hover,
+            &:focus,
+            &:active,
+            &:focus-within {
+                .description {
+                    top: 0;
+                }
+            }
         }
 
         .iframe-wrapper {
@@ -224,13 +245,11 @@ a {
             }
         }
         .selectors {
+            margin: 0 auto;
+
             text-align: center;
             padding: 0.2em 0;
             padding-bottom: 0.4em;
-
-            margin: 0 auto;
-
-            max-width: calc(80% - 5em);
         }
 
         input {
