@@ -90,12 +90,18 @@ a {
     }
 
     &:focus {
-        outline: 2px solid white;
+        outline: 0.1em solid white;
 
-        outline-offset: -4px;
+        outline-offset: -0.2em;
     }
     &:active {
         color: black;
+    }
+}
+
+#links {
+    a {
+        padding: 0.3em 0.5em;
     }
 }
 

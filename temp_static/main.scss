@@ -121,9 +121,9 @@ section {
         }
 
         &:focus {
-            outline: 2px solid white;
+            outline: 0.1em solid white;
 
-            outline-offset: -4px;
+            outline-offset: -0.2em;
         }
         &:active {
             color: black;
@@ -146,7 +146,7 @@ section {
             padding: 0.2em;
 
             a {
-                padding: 0.5em 0.6em;
+                padding: 0.3em 0.5em;
             }
         }
     }
