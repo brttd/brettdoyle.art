@@ -84,7 +84,7 @@ a {
     border-left: 0.1em solid $high_color_trans;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
     #other {
         display: block;
 
@@ -94,9 +94,18 @@ a {
     }
 
     #website {
-        padding-bottom: 0.3em;
+        &::after {
+            content: '';
+            display: block;
 
-        border-bottom: 0.1em solid $high_color_trans;
+            margin: 0 auto;
+            margin-top: 0.3em;
+
+            width: 1.5em;
+            max-width: 100%;
+
+            border-bottom: 0.1em solid $high_color_trans;
+        }
     }
 }
 
@@ -313,6 +322,8 @@ a {
     #info {
         position: relative;
         max-width: 40em;
+
+        padding: 1em;
     }
 }
 
