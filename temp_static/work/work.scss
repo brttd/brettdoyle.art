@@ -217,6 +217,7 @@ a {
         }
         .images {
             position: relative;
+            z-index: 1;
 
             img {
                 display: none;
