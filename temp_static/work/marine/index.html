@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>SC2 Marine | Brett Doyle</title>
+
+        <meta name="description" content="SC2 Marine, 3D model.">
+        <meta name="author" content="Brett Doyle">
+
+        <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+
+        <meta id="theme-color" name="theme-color" content="hsl(120, 100%, 30%)">
+        <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett">
+
+        <link href="/work/work.css" rel="stylesheet" />
+        <style>
+@font-face {
+    font-family: 'Dosis';
+    
+    font-display: fallback;
+
+    src: url('/fonts/Dosis.eot');
+    src: url('/fonts/Dosis.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Dosis.woff2') format('woff2'),
+        url('/fonts/Dosis.woff') format('woff'),
+        url('/fonts/Dosis.ttf') format('truetype'),
+        url('/fonts/Dosis.svg#dosisregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+</style>
+    </head>
+<body><canvas
+    id="canvas"
+    style="position: fixed; top: 0; left: 0; z-index: -1; opacity: 0; transition: opacity 1s"
+></canvas>
+<div id="links">
+<ul id="website">
+<li><a href="/">Home</a></li>
+<li><a href="/about">About</a></li>
+<li><a href="/resume">Résumé</a></li>
+</ul><ul id="other">
+<li>
+<a href="https://www.artstation.com/brettd" target="_blank" rel="noopener">ArtStation</a>
+</li>
+<li>
+<a href="https://www.instagram.com/brettdoyle.art" target="_blank" rel="noopener">Instagram</a>
+</li>
+<li>
+<a href="https://github.com/brttd" target="_blank" rel="noopener">GitHub</a>
+</li>
+<li>
+<a href="https://www.youtube.com/BrettDoyle" target="_blank" rel="noopener">YouTube</a>
+</li>
+</ul>
+</div>
+<div id="project">
+<div id="info">
+<h1 id="title">SC2 Marine</h1>
+<p id="description">Stacraft 2 Marine suit torso.
+Created with ZBrush, and retoplogized in Maya. Textured with Substance Painter and rendered in Marmoset Toolbag.
+Made while studying with CGSpectrum, in the hard surface modelling part of their <a href="https://www.cgspectrum.edu.au/online-courses/zbrush-digital-sculpting-classes/" target="_blank">Advanced 3D Modelling</a> Diploma.
+<div class="links">
+<a href="https://www.artstation.com/artwork/Yaaw4X" target="_blank">View project on ArtStation</a>
+</div>
+</div>
+<div id="contents">
+<div class="content image">
+<input type="radio" name="marmoset_1" id="marmoset_1_1" class="img1"  checked>
+<input type="radio" name="marmoset_1" id="marmoset_1_2" class="img2">
+<div class="image-container">
+<div class="images fade">
+<img src="marmoset_1.jpg" width="640" height="360">
+<img src="marmoset_1_wire.jpg" width="640" height="360">
+</div>
+</div>
+<div class="info">
+<div class="description">Marmoset Toolbag</div>
+<div class="selectors">
+<label for="marmoset_1_1" class="img1">Render</label>
+<label for="marmoset_1_2" class="img2">Wireframe</label>
+</div>
+</div>
+</div>
+<div class="content image">
+<input type="radio" name="marmoset_2" id="marmoset_2_1" class="img1"  checked>
+<input type="radio" name="marmoset_2" id="marmoset_2_2" class="img2">
+<div class="image-container">
+<div class="images">
+<img src="marmoset_2.jpg" width="640" height="360">
+<img src="marmoset_3.jpg" width="640" height="360">
+</div>
+</div>
+<div class="info">
+<div class="description">Marmoset Toolbag</div>
+<div class="selectors">
+<label for="marmoset_2_1" class="img1">Side</label>
+<label for="marmoset_2_2" class="img2">Back</label>
+</div>
+</div>
+</div>
+<div class="content sketchfab">
+<div class="iframe-wrapper">
+<iframe width="640" height="360" src="https://sketchfab.com/models/f2896bf444a74da0a96352a22042e114/embed?camera=0&amp;preload=1&amp;ui_stop=0" frameborder="0" allow="autoplay; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+</div>
+<div class="info"><div class="description">Sketchfab</div></div>
+</div>
+</div>
+</div><script>
+        if (!Date.now) {
+            Date.now = function now() {
+                return new Date().getTime()
+            }
+        }
+        
+        var background_scripts = [
+            'shiftingTriangleGrid',
+            'flowingArcs',
+            'pixelGrid'
+        ]
+        
+        var canvas = document.getElementById('canvas')
+        var ctx = canvas.getContext('2d')
+        
+        var min_light = 92
+        var max_light = 98
+        
+        var grey = 'hsl(0, 0%, ' + 96 + '%)'
+        
+        var w = 0
+        var h = 0
+        
+        var retain_on_resize = false
+        var temp_image_data = false
+        
+        function updateCanvasSize() {
+            if (retain_on_resize) {
+                temp_image_data = ctx.getImageData(0, 0, w, h)
+            }
+        
+            w = canvas.width = window.innerWidth
+            h = canvas.height = window.innerHeight
+        
+            if (retain_on_resize) {
+                ctx.putImageData(temp_image_data, 0, 0)
+                temp_image_data = false
+            }
+        
+            if (typeof onCanvasSizeChange == 'function') {
+                onCanvasSizeChange()
+            }
+        }
+        
+        w = canvas.width = window.innerWidth
+        h = canvas.height = window.innerHeight
+        
+        window.addEventListener('resize', updateCanvasSize)
+        
+        var script = document.createElement('script')
+        script.src =
+            '/backgrounds/' +
+            background_scripts[
+                Math.round(Math.random() * (background_scripts.length - 1))
+            ] +
+            '.js'
+        
+        script.onload = function() {
+            //only display the background once the script has started running
+            canvas.style.opacity = '1'
+        }
+        
+        document.body.appendChild(script)
+        </script>
+</body>
+</html>
