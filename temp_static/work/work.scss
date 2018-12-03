@@ -316,7 +316,7 @@ a {
     }
 }
 
-@media (min-aspect-ratio: 2 / 5) {
+@media (min-aspect-ratio: 5 / 2) and (min-width: 800px) {
     #project {
         max-width: 250vmin;
         min-width: 38em;
