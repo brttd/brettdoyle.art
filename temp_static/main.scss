@@ -237,7 +237,6 @@ $portfolio_vertical_padding: 0.5em;
         font-size: 0.8rem;
 
         text-decoration: none;
-        color: white;
 
         background: rgb(128, 128, 128);
 
@@ -265,15 +264,19 @@ $portfolio_vertical_padding: 0.5em;
         span {
             position: absolute;
             bottom: 0;
-            left: 0;
+            //left: 0;
             right: 0;
 
-            opacity: 0.5;
+            box-sizing: border-box;
 
-            padding: 0.8em;
-            background: rgba(0, 0, 0, 0.5);
+            min-width: 50%;
 
-            transition: opacity 0.1s ease-out;
+            padding: 0.3em 0.5em;
+
+            text-align: left;
+            color: black;
+
+            background: white;
         }
 
         &:hover,
@@ -281,19 +284,16 @@ $portfolio_vertical_padding: 0.5em;
             img {
                 transform: scale(1.1);
             }
-            span {
-                opacity: 1;
-            }
         }
         &:focus {
-            outline: 0.2em solid $high_color;
+            outline: 0.3em solid $high_color;
 
             z-index: 2;
         }
         &:active {
             span {
                 background: $high_color;
-                color: white;
+                font-weight: bold;
             }
         }
     }
