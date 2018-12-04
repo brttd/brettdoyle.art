@@ -153,6 +153,7 @@ a {
     background: white;
 
     .content {
+        position: relative;
         width: 100%;
 
         overflow: hidden;
@@ -195,27 +196,44 @@ a {
         }
 
         .info {
-            position: relative;
-        }
-
-        .description {
             position: absolute;
-            top: -1.4em;
+            bottom: 0;
+            left: 0;
             right: 0;
 
             z-index: 3;
+
+            display: flex;
+            flex-flow: row wrap;
+            align-items: flex-end;
+            justify-content: flex-end;
+
+            width: 100%;
+        }
+
+        .description {
+            display: inline-block;
+
+            flex: 1 0 auto;
+
+            vertical-align: bottom;
 
             padding: 0.2em 0.3em;
             padding-right: 0.6em;
 
             line-height: 1.1;
-            text-align: right;
+            text-align: left;
             font-size: 0.8em;
             font-style: italic;
 
             background: white;
 
             transition: top 0.3s;
+
+            // If the description is the only child, it should't grow
+            &:nth-child(1) {
+                flex: 0 0 auto;
+            }
         }
 
         &.youtube,
@@ -289,36 +307,59 @@ a {
             }
         }
         .selectors {
-            margin: 0 auto;
+            display: inline-block;
 
-            text-align: center;
-            padding: 0.2em 0;
-            padding-bottom: 0.4em;
-        }
+            flex: 100 1 auto;
 
-        input {
-            display: none;
+            text-align: left;
         }
 
         .selectors label {
             display: inline-block;
 
-            color: black;
-            font-weight: bold;
-
             padding: 0.2em 0.3em;
+
+            color: white;
+            line-height: 1.1;
+
+            background: black;
+
+            opacity: 0.5;
             text-decoration: none;
 
             cursor: pointer;
 
-            &:hover {
-                text-decoration: underline;
+            &::before {
+                //content: '';
+                display: block;
+
+                position: absolute;
+
+                top: -1em;
+                left: 50%;
+                left: calc(50% - 0.1em);
+
+                width: 0.2em;
+                height: 0.2em;
+
+                background: white;
+
+                border-radius: 1em;
+            }
+
+            &:hover,
+            &:focus {
+                opacity: 1;
             }
 
             &:active {
-                outline: 0.1em solid white;
+                outline: 0.1em solid black;
                 outline-offset: -0.2em;
             }
+        }
+
+        input {
+            display: none;
         }
 
         @for $i from 1 through 5 {
@@ -333,9 +374,13 @@ a {
             }
 
             .img#{$i}:checked ~ div .img#{$i} {
-                color: white;
+                color: black;
                 text-decoration: underline;
-                background: $high_color_trans;
+                font-weight: bold;
+
+                background: white;
+
+                opacity: 1;
             }
         }
     }
