@@ -1,6 +1,6 @@
-/résumé /resume 200
+/résumé* /resume:splat 302
 
-/resume/pdf /resume.pdf 200
+/resume/pdf* /resume.pdf 302
 
 /showreel* /reel:splat 200
 /demoreel* /reel:splat 200
