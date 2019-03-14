@@ -60,6 +60,4 @@
     {{ end }}
 {{ end }}
 
-{{ range .Site.Data.Options.fonts }}
-    {{ partial "stylesheet" (dict "Stylesheet" (print "fonts/" . ) "Inline" "true" ) }}
-{{ end }}
+{{ partial "stylesheet" (dict "Stylesheet" "dosis" "Inline" "true" ) }}
