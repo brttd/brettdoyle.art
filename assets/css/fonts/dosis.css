@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'Dosis';
+
+    font-display: fallback;
+
+    src: url('/fonts/dosis.eot');
+    src: url('/fonts/dosis.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/dosis.woff2') format('woff2'),
+        url('/fonts/dosis.woff') format('woff'),
+        url('/fonts/dosis.ttf') format('truetype'),
+        url('/fonts/dosis.svg#dosisregular') format('svg');
+
+    font-weight: normal;
+    font-style: normal;
+}

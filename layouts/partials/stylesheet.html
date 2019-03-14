@@ -1,0 +1,24 @@
+{{ $scratch := newScratch }}
+
+{{ $scratch.Set "inline" "false" }}
+
+{{ if eq (printf "%T" .) "string" }}
+    {{ $scratch.Set "stylesheet" . }}
+{{ else }}
+    {{ $scratch.Set "stylesheet" .Stylesheet }}
+
+    {{ if eq .Inline "true" }}
+        {{ $scratch.Set "inline" "true" }}
+    {{ end}}
+{{ end }}
+
+{{ $path := print "css/" ( $scratch.Get "stylesheet" ) ".css" }}
+
+{{ if fileExists (print "assets/" $path) }}
+    {{ $sheet := resources.Get $path | resources.Minify }}
+    {{ if eq ($scratch.Get "inline") "true" }}
+        <style>{{ $sheet.Content | safeCSS }}</style>
+    {{ else }}
+        <link rel="stylesheet" href="{{ ($sheet | resources.Fingerprint ).RelPermalink }}">
+    {{ end }}
+{{ end }}

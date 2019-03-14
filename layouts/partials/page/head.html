@@ -1,0 +1,65 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+{{ $scratch := newScratch }}
+
+{{ $scratch.Set "Title" .Site.Title }}
+{{ if .IsHome }}
+    {{ $scratch.Set "Title" (print ($scratch.Get "Title") " | 3D Artist" ) }}
+{{ else }}
+    {{ with .Title }}
+        {{ $scratch.Set "Title" (print ($scratch.Get "Title") " | " . ) }}
+    {{ end }}
+{{ end }}
+
+{{ if fileExists "assets/favicon.ico" }}
+    {{ with resources.Get "favicon.ico" }}
+        <link rel="shortcut icon" href="{{ .RelPermalink }}">
+    {{ end }}
+{{ end }}
+
+{{ $scratch.Set "Description" .Summary }}
+{{ with .Description }}
+    {{ $scratch.Set "Description" . }}
+{{ end }}
+
+{{ $favicon := resources.Get "favicon.png" }}
+{{ range $size := (seq 16 8 32) }}
+    {{ $size := string $size }}
+    {{ $size := print $size "x" $size }}
+
+    <link rel="icon" type="image/png" href="{{ ($favicon.Resize $size).RelPermalink }}" sizes="{{$size}}">
+{{ end }}
+
+<title>{{ $scratch.Get "Title" }}</title>
+<meta name="description" content="{{ $scratch.Get "Description" }}">
+<meta name="author" content="{{ .Site.Data.Profile.name }}">
+
+<meta id="theme-color" name="theme-color" content="{{ .Site.Data.Options.color }}">
+<meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett">
+
+<meta property="og:url" content="{{ .Permalink }}" />
+<meta property="og:title" content="{{ $scratch.Get "Title" }}" />
+<meta property="og:description" content="{{ $scratch.Get "Description" }}" />
+<meta property="article:author" content="{{ .Site.Data.Profile.name }}" />
+
+{{ if isset .Params "Type" }}
+    <meta property="og:type" content="{{ .Params.Type }}" />
+{{ else if .IsHome }}
+    <meta property="og:type" content="profile" />
+{{ else }}
+    <meta property="og:type" content="article" />
+{{ end }}
+
+{{ if isset .Params "image" }}
+    {{ with .Resources.GetMatch .Params.image }}
+        {{ $imageLink := urls.Parse (.Fill "1200x630").Permalink }}
+        <meta property="og:image" content='{{ print "http://" $imageLink.Host $imageLink.Path }}'/>
+        <meta property="og:image:secure_url" content='{{ print "https://" $imageLink.Host $imageLink.Path }}'/>
+        <meta property="twitter:image" content='{{(.Fill "1200x600").Permalink}}'/>
+    {{ end }}
+{{ end }}
+
+{{ range .Site.Data.Options.fonts }}
+    {{ partial "stylesheet" (dict "Stylesheet" (print "fonts/" . ) "Inline" "true" ) }}
+{{ end }}

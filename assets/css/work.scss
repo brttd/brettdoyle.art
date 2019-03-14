@@ -1,0 +1,425 @@
+@import 'components/base.scss';
+@import 'components/header.scss';
+@import 'components/work-list.scss';
+
+$info-max-width: 30em;
+$media-max-width: 1920px;
+
+#header-image {
+    margin: 0 auto;
+
+    padding: 1em;
+    padding-bottom: 0;
+
+    img {
+        display: block;
+    }
+
+    .wrapper {
+        max-width: 2790px;
+        max-width: calc(#{$media-max-width} + #{$info-max-width});
+
+        margin: 0 auto;
+    }
+
+    &.multi {
+        position: relative;
+
+        .wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        img {
+            position: relative;
+            z-index: -1;
+
+            opacity: 0;
+
+            transition: opacity 0.1s;
+            transition-delay: 0.4s;
+        }
+
+        img:nth-child(1n + 2) {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
+}
+#header-image-selector {
+    position: relative;
+    z-index: 3;
+
+    margin: 0 auto;
+
+    text-align: center;
+
+    label {
+        display: inline-block;
+        position: relative;
+
+        margin: 0 0.25em;
+        padding: 0 0.25em;
+
+        cursor: pointer;
+
+        &:before {
+            content: '•';
+            display: block;
+
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -100%;
+
+            margin-bottom: -0.3em;
+        }
+    }
+
+    & + main {
+        padding-top: 0;
+    }
+}
+@media (min-aspect-ratio: 1920 / 1080) {
+    #header-image,
+    #header-width {
+        max-width: #{100vh * (1920 / 1080)};
+    }
+}
+
+@for $index from 0 through 3 {
+    #header_image_input_#{ $index }:checked {
+        & ~ #header-image #header_image_#{ $index } {
+            opacity: 1;
+            z-index: 2;
+
+            transition-duration: 0.4s;
+            transition-delay: 0s;
+        }
+        & ~ #header-image-selector #header_image_label_#{ $index } {
+            color: $high_color;
+            background: white;
+
+            border-bottom: 0.1em solid $high_color;
+
+            &::before {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+main {
+    display: flex;
+
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: flex-start;
+
+    min-width: 40em;
+    width: 100%;
+    width: fit-content;
+    max-width: #{100vmin * (1920 / 1080)};
+
+    margin: 0 auto;
+    padding: 1em;
+}
+
+#info {
+    flex: 0 1 30%;
+    box-sizing: border-box;
+
+    position: sticky;
+    top: 1em;
+
+    min-width: 10em;
+    max-width: $info-max-width;
+
+    margin: 0 auto;
+    padding: 0;
+    padding-right: 0.5em;
+
+    h1,
+    p {
+        margin: 0;
+        margin-bottom: 0.4em;
+    }
+
+    nav {
+        margin-top: 0.6em;
+    }
+
+    img {
+        display: inline-block;
+        width: auto;
+    }
+}
+@media (max-width: 30em) {
+    #info {
+        max-width: 100%;
+    }
+}
+
+#links {
+    display: inline-block;
+
+    padding: 0.2em 0.3em;
+    padding-top: 0.5em;
+
+    border-top: 0.1em solid $high_color;
+}
+
+#media {
+    flex: 1 1 68%;
+
+    max-width: $media-max-width;
+
+    margin-top: 0.5em;
+
+    background: white;
+
+    p {
+        margin: 0.5em;
+
+        text-align: center;
+    }
+
+    .media {
+        position: relative;
+
+        width: 100%;
+
+        overflow: hidden;
+
+        input {
+            display: none;
+        }
+
+        img,
+        iframe {
+            display: block;
+
+            width: 100%;
+            height: auto;
+        }
+
+        .wrapper {
+            overflow: hidden;
+        }
+
+        &.iframe,
+        &.image {
+            .wrapper {
+                position: relative;
+
+                width: 100%;
+                height: 0;
+
+                padding-top: 56.25%;
+
+                background: hsl(0, 0%, 90%);
+
+                iframe,
+                img {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+
+                    height: 100%;
+                }
+            }
+        }
+
+        .images {
+            position: relative;
+            z-index: 1;
+
+            width: 100%;
+
+            img {
+                display: none;
+            }
+
+            &.fade {
+                //Images which fade need to have extra properties
+                //Every image except for the first one needs to be positioned absolutely (So that they are perfectly stacked ontop of eachother)
+                //By default, they should be not show (opacity: 0)
+                //When fading in, their opacity is set to 1, and transition-delay to 0s
+                //But they should only fade out after the newly selected image has finished fading in,
+                //so transition delay is set to 0.4s, meaning they will be visible the entire time the new image fades in, and then disappear afterwards
+                //The z-index is also important, the selected image must always show on top, so all other images have -1 z index
+                img {
+                    display: block;
+
+                    position: relative;
+                    z-index: -1;
+
+                    opacity: 0;
+
+                    transition: opacity 0.1s;
+                    transition-delay: 0.4s;
+                }
+
+                img:nth-child(1n + 2) {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+            }
+        }
+
+        .info {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            z-index: 3;
+
+            width: 100%;
+
+            line-height: 1.1;
+        }
+
+        .description {
+            position: absolute;
+            top: 0;
+            right: -1em;
+
+            max-width: 100%;
+
+            padding: 0.2em 0.6em;
+            padding-right: 1.6em;
+
+            font-size: 0.8em;
+            color: black;
+
+            background: white;
+
+            transform: skewX(10deg);
+
+            span {
+                display: inline-block;
+
+                transform: skewX(-10deg);
+            }
+        }
+
+        .selectors {
+            display: block;
+            position: absolute;
+
+            //Offset 1em left to hide the slant of the box on the left
+            //And offset 1px down to fix rounding error showing bottom row of image pixels below box
+            left: -1em;
+            bottom: -1px;
+
+            padding: 0 1em;
+            padding-right: 0.25em;
+
+            text-align: center;
+
+            background: white;
+
+            transform: skewX(10deg);
+
+            label {
+                display: inline-block;
+
+                min-width: 2em;
+
+                margin: 0 -1px;
+                padding: 0.2em 0.3em;
+
+                font-size: 1rem;
+
+                color: white;
+                text-decoration: none;
+
+                background: black;
+
+                cursor: pointer;
+
+                transform: skewX(-10deg);
+
+                &:hover {
+                    background: rgb(128, 128, 128);
+                }
+
+                &:active {
+                    outline: 0.1em solid white;
+                    outline-offset: -0.2em;
+                }
+            }
+        }
+
+        input:checked + input ~ div .selectors {
+            background: black;
+        }
+
+        @for $i from 0 through 5 {
+            .i_#{$i}:checked ~ .wrapper .images :nth-child(#{$i + 1}) {
+                display: block;
+
+                opacity: 1;
+                z-index: 2;
+
+                transition-duration: 0.4s;
+                transition-delay: 0s;
+            }
+
+            .i_#{$i}:checked ~ div .i_#{$i} {
+                color: black;
+                text-decoration: underline;
+
+                background: white;
+            }
+        }
+    }
+}
+@media (max-width: 1920px) {
+    #media {
+        max-width: 98%;
+        max-width: 100vw;
+    }
+}
+
+@media (max-aspect-ratio: 4 / 3), (max-width: 800px) {
+    #header-image {
+        padding: 0;
+    }
+
+    main {
+        display: block;
+
+        min-width: 0;
+
+        padding: 0;
+    }
+    #info {
+        position: relative;
+
+        max-width: 40em;
+
+        padding: 1em;
+    }
+    #header-image-selector ~ main #info {
+        padding-top: 0.5em;
+    }
+}
+
+#work {
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    text-align: center;
+
+    h2 {
+        margin: 0.4em;
+    }
+}

@@ -1,0 +1,24 @@
+{{ define "main" }}
+    <article>
+        {{ .Content }}
+        {{ $currentPage := . }}
+        {{ with .Site.Menus.site }}
+            <ul id="links">
+                {{ range . }}
+                    {{ if not (or ($currentPage.IsMenuCurrent "site" .) ($currentPage.HasMenuCurrent "site" .)) }}
+                        <li>
+                            <a href="{{ .URL }}" title="{{ .Title }}">{{ .Name }}</a>
+                        </li>
+                    {{ end }}
+                {{ end }}
+            </ul>
+        {{ end }}
+    </article>
+{{ end }}
+
+{{ define "footer" }}
+    <section id="work">
+        <h2>My Work</h2>
+        {{ partial "work-list" . }}
+    </section>
+{{ end }}

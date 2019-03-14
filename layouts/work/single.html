@@ -1,0 +1,59 @@
+{{ define "head" }}
+    {{ partial "stylesheet" "work" }}
+{{ end }}
+
+{{ define "header" }}
+
+    {{ if isset .Params "images" }}
+        {{ $Resources := .Resources }}
+        {{ range $index, $image := first 3 .Params.images }}
+            <input type="radio" name="header_image" id="header_image_input_{{ $index }}" {{ if eq $index 0 }}checked{{ end }} style="display: none">
+        {{ end }}
+        <div id="header-image" class="multi">
+            <div class="wrapper">
+                {{ range $index, $image := first 3 .Params.images }}
+                    {{ with $Resources.GetMatch $image.image }}
+                        {{ partial "image" (dict "Image" . "id" (print "header_image_" $index ) ) }}
+                    {{ end }}
+                {{ end }}
+            </div>
+        </div>
+        <div id="header-image-selector">
+            {{ range $index, $image := first 3 .Params.images }}
+                <label for="header_image_input_{{ $index }}" id="header_image_label_{{ $index }}">{{ $image.title }}</label>
+            {{ end }}
+        </div>
+    {{ else if isset .Params "image" }}
+        {{ with .Resources.GetMatch .Params.image }}
+            <div id="header-image"><div class="wrapper">{{ partial "image" (dict "Image" .) }}</div></div>
+        {{ end }}
+    {{ end }}
+{{ end }}
+
+{{ define "main" }}
+    {{ $Resources := .Resources }}
+
+    <article id="info">
+        <h1 id="title">{{ .Title }}</h1>
+        {{ .Content }}
+
+        {{ with .Params.links }}
+            <ul id="links">
+                {{ range . }}
+                    <li><a href="{{ .URL }}" target="_blank" rel="noopener">{{ .name }}</a></li>
+                {{ end }}
+            </ul>
+        {{ end }}
+    </article>
+
+    {{ with .Params.Media }}
+        {{ partial "media/list" (dict "Resources" $Resources "Media" . ) }}
+    {{ end }}
+{{ end }}
+
+{{ define "footer" }}
+    <section id="work">
+        <h2>Other Work</h2>
+        {{ partial "work-list" . }}
+    </section>
+{{ end }}

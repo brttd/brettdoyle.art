@@ -1,0 +1,27 @@
+{{ define "head" }}
+    {{ partial "stylesheet" "reel" }}
+{{ end }}
+
+{{ define "main" }}
+    {{ with .Site.Data.Profile.youtubeReel }}
+        <div id="iframe-wrapper">
+            <iframe
+                width="1920"
+                height="1080"
+                src="https://www.youtube.com/embed/{{ . }}?modestbranding=1"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            ></iframe>
+        </div>
+    {{ else }}
+        <p>{{ .Content }}</p>
+    {{ end }}
+{{ end }}
+
+{{ define "footer" }}
+    <section id="work">
+        <h2>My Work</h2>
+        {{ partial "work-list" . }}
+    </section>
+{{ end }}

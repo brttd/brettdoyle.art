@@ -1,0 +1,19 @@
+<canvas
+    id="canvas"
+    style="position: fixed; top: 0; left: 0; z-index: -1; opacity: 0; transition: opacity 1s"
+></canvas>
+<script>
+var background_scripts = [
+    {{ range .Site.Data.Backgrounds }}
+        {{ $path := print "js/backgrounds/" . ".js" }}
+
+        {{ if fileExists (print "assets/" $path ) }}
+            {{ $file := (resources.Get $path) | resources.Minify }}
+            {{ $file.RelPermalink }},
+        {{ end }}
+    {{ end }}
+]
+
+{{ $script := resources.Get "js/background.js" }}
+{{ ($script | resources.Minify).Content | safeJS }}
+</script>

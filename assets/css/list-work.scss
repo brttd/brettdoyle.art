@@ -1,0 +1,22 @@
+@import 'components/base.scss';
+@import 'components/header.scss';
+@import 'components/work-list.scss';
+@import 'components/colors.scss';
+
+main {
+    display: block;
+    max-width: 60em;
+
+    margin: 0 auto;
+    padding: 0;
+}
+
+#work-list {
+    a {
+        box-sizing: border-box;
+
+        padding: 0.9em;
+
+        background: white;
+    }
+}

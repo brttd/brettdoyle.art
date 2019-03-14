@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {{ partial "page/head" . }}
+        
+        {{ partial "stylesheet" "homepage" }}
+    </head>
+    <body>
+        {{ partial "page/background" . }}
+        <main>
+            <div id="bio_wrapper">
+                <article id="bio">
+                    <h1>{{ .Site.Data.Profile.name }}</h1>
+                    {{ .Content }}
+                    <span id="email">My email is <a href="mailto://{{ .Site.Data.Profile.email }}" target="_blank" rel="noopener">{{ .Site.Data.Profile.email }}</a>.</span>
+                    {{ with .Site.Data.Profile.links }}
+                        <span id="link-text">And you can find me on:</span>
+                        <ul id="links">
+                        {{ range . }}
+                            <li>
+                                {{ partial "social-icon" . }}
+                            </li>
+                        {{ end }}
+                        </ul>
+                    {{ end }}
+                </article>
+            </div>
+            <div id="portfolio">
+                {{ with .Site.Data.Profile.youtubeReel }}
+                    <section id="reel">
+                        <noscript id="iframe_noscript">
+                            <iframe
+                                width="560"
+                                height="315"
+                                src="https://www.youtube.com/embed/{{ . }}?modestbranding=1"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                            ></iframe>
+                        </noscript>
+                        <script>
+window.onload = function() {
+    var frame = document.createElement('iframe')
+    frame.setAttribute('width', '560')
+    frame.setAttribute('height', '315')
+    frame.setAttribute('frameborder', '0')
+    frame.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture')
+    frame.setAttribute('allowfullscreen', '')
+    frame.src = 'https://www.youtube.com/embed/{{ . }}?modestbranding=1'
+    
+    var reel = document.getElementById('reel')
+    reel.appendChild(frame)
+    reel.removeChild(document.getElementById('iframe_noscript'))
+}
+                        </script>
+                    </section>
+                {{ end }}
+                <section id="work">
+                    <h2>Portfolio</h2>
+                    {{ partial "work-list" . }}
+                </section>
+            </div>
+        </main>
+    </body>
+</html>

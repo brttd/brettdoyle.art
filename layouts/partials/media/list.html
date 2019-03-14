@@ -1,0 +1,22 @@
+{{ $Resources := .Resources }}
+<section id="media">
+    {{ range $index, $media := .Media }}
+        {{ $ID := (print "media_" $index) }}
+
+        {{ if isset $media "image" }}
+            {{ partial "media/image" (dict "Resources" $Resources "Media" $media "ID" $ID) }}
+        {{ end }}
+
+        {{ if isset $media "iframe" }}
+            {{ partial "media/iframe" (dict "Resources" $Resources "Media" $media "ID" $ID) }}
+        {{ end }}
+
+        {{ if isset $media "images" }}
+            {{ partial "media/images" (dict "Resources" $Resources "Media" $media "ID" $ID) }}
+        {{ end }}
+
+        {{ if isset $media "text" }}
+            <p>{{ $media.text | safeHTML }}</p>
+        {{ end }}
+    {{ end }}
+</section>

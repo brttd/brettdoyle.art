@@ -1,0 +1,93 @@
+@import 'colors.scss';
+
+#work-list {
+    font-size: 0;
+
+    a {
+        display: inline-block;
+        position: relative;
+
+        overflow: hidden;
+
+        width: 25%;
+        max-width: 400px;
+        min-height: 3em;
+
+        padding: 0;
+
+        font-size: 20px;
+        font-size: 0.8rem;
+
+        text-decoration: none;
+
+        background: rgb(128, 128, 128);
+
+        img {
+            max-width: 100%;
+
+            transform: scale(1);
+
+            transition: transform 0.4s ease;
+        }
+
+        .title {
+            position: absolute;
+            bottom: -1px;
+            right: -1.15em;
+
+            min-width: 50%;
+
+            padding: 0;
+            padding-right: 1em;
+
+            text-align: left;
+
+            color: black;
+            background: white;
+
+            transform: skewX(-10deg);
+        }
+
+        span {
+            display: inline-block;
+
+            padding: 0.2em 0.5em;
+
+            transform: skewX(10deg);
+        }
+
+        &:hover,
+        &:focus {
+            img {
+                transform: scale(1.1);
+            }
+        }
+        &:focus {
+            z-index: 2;
+
+            outline: 0.3em solid $high_color;
+        }
+        &:active {
+            img {
+                outline: 0.3em solid $high_color;
+                outline-offset: -0.3em;
+            }
+        }
+    }
+}
+
+@media (max-width: 1200px) {
+    #work-list a {
+        width: 33.3%;
+    }
+}
+@media (max-width: 800px) {
+    #work-list a {
+        width: 50%;
+    }
+}
+@media (max-width: 400px) {
+    #work-list a {
+        width: 100%;
+    }
+}

@@ -1,0 +1,119 @@
+@import 'colors.scss';
+
+body,
+html {
+    min-height: 100%;
+
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 17px;
+    font-size: calc(14px + 1.2vmin);
+    font-family: 'Dosis', sans-serif;
+
+    color: black;
+    background: white;
+}
+
+@media (min-width: 1250px) and (min-height: 1250px) {
+    html {
+        font-size: 29px;
+    }
+}
+
+::selection {
+    color: white;
+    background: $alt_color;
+}
+
+h1,
+p,
+ul {
+    display: block;
+
+    margin: 0;
+    margin-bottom: 1em;
+    padding: 0;
+}
+h1 {
+    margin-bottom: 0.5em;
+}
+
+ul {
+    margin: 0;
+    list-style: none;
+}
+li {
+    display: inline-block;
+
+    list-style: none;
+}
+
+article li {
+    margin-right: 1em;
+
+    &:last-child {
+        margin-right: 0;
+    }
+}
+
+article,
+header {
+    a {
+        display: inline-block;
+
+        font-weight: bold;
+        text-decoration: none;
+        color: black;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+            color: white;
+            background: $high_color;
+
+            img {
+                filter: invert(100%);
+            }
+        }
+
+        &:focus {
+            outline: 0.1em solid $high_color;
+            outline-offset: 0.1em;
+        }
+        &:active {
+            outline-color: white;
+            outline-width: 0.12em;
+            outline-offset: -0.1em;
+        }
+
+        img {
+            display: inline-block;
+            vertical-align: top;
+
+            width: 1.2em;
+            height: 1.2em;
+        }
+    }
+}
+article {
+    p,
+    span,
+    ul {
+        a {
+            margin: -0.2em -0.3em;
+            padding: 0.2em 0.3em;
+        }
+    }
+}
+
+img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    border: none;
+}

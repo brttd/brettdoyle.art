@@ -1,0 +1,16 @@
+baseURL = "https://brettdoyle.art/"
+languageCode = "en-gb"
+title = "Brett Doyle"
+author = "Brett Doyle"
+
+disableKinds = ["taxonomy", "taxonomyTerm", "RSS", "sitemap"]
+
+[imaging]
+resampleFilter = "Lanczos"
+quality = 81
+
+[menu]
+    [[menu.site]]
+        identifier = "Résumé"
+        name = "Résumé"
+        url = "/resume/"

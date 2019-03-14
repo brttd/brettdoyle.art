@@ -1,0 +1,33 @@
+{{ $id := .ID }}
+{{ $item := .Media }}
+{{ $Resources := .Resources }}
+
+{{ with .Media.images }}
+    {{ $scratch := newScratch }}
+    {{ with ($Resources.GetMatch (index . 0).image) }}
+        {{ $scratch.Set "padding" (mul (div (float .Height) .Width) 100)}}
+    {{ end }}
+
+    <div class='media images'>
+        {{ range $index, $image := . }}
+            <input type="radio" name="{{ $id }}" id="{{ $id }}_{{ $index }}" class="i_{{ $index }}" {{ if eq $index 0 }}checked{{ end }}>
+        {{ end }}
+        <div class="wrapper">
+            <div class="images{{ if isset $item "fade"}} fade{{ end }} ">
+                {{ range . }}
+                    {{ with $Resources.GetMatch .image }}
+                        {{ partial "image" (dict "Image" .) }}
+                    {{ end }}
+                {{ end }}
+            </div>
+        </div>
+        <div class="info">
+            <div class="selectors">
+                {{ range $index, $image := . }}<label for="{{ $id }}_{{ $index }}" class="i_{{ $index }}">{{ $image.title }}</label>{{ end }}
+            </div>
+            {{ with $item.title }}
+                <div class="description"><span>{{ . }}</span></div>
+            {{ end }}
+        </div>
+    </div>
+{{ end }}

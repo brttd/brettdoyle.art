@@ -1,0 +1,27 @@
+{{ $item := .Media }}
+{{ $Resources := .Resources}}
+
+{{ $scratch := newScratch }}
+
+{{ $scratch.Set "width" 960}}
+{{ $scratch.Set "height" 540}}
+
+{{ if and (isset .Media "width") (isset .Media "height") }}
+    {{ $scratch.Set "width" .Media.width }}
+    {{ $scratch.Set "height" .Media.height }}
+{{ end }}
+
+{{ $scratch.Set "padding" (mul (div (float ($scratch.Get "height")) ($scratch.Get "width")) 100) }}
+
+<div class="media iframe">
+    <div class="wrapper"{{ if not (eq ($scratch.Get "padding") 56.25) }} style='padding-top: {{ $scratch.Get "padding" }}%'{{ end }}>
+        <iframe
+        {{ with $scratch.Get "width" }}
+            width="{{ . }}"
+        {{ end }}
+        {{ with $scratch.Get "height" }}
+            height="{{ . }}"
+        {{ end }}
+        src="{{ .Media.iframe }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true" allowfullscreen></iframe>
+    </div>
+</div>

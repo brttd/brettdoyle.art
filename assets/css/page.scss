@@ -1,0 +1,53 @@
+@import 'components/base.scss';
+@import 'components/header.scss';
+@import 'components/work-list.scss';
+@import 'components/colors.scss';
+
+main {
+    display: block;
+    max-width: 40em;
+
+    margin: 0 auto;
+    padding: 1em;
+}
+
+section {
+    max-width: 100%;
+}
+
+article {
+    img {
+        float: left;
+
+        width: 50%;
+        max-width: 15em;
+
+        margin-right: 1em;
+        margin-bottom: 1em;
+    }
+
+    :last-child {
+        margin-bottom: 0;
+    }
+}
+
+#links {
+    display: inline-block;
+
+    padding: 0.2em 0.3em;
+    padding-top: 0.5em;
+
+    border-top: 0.1em solid $high_color;
+}
+
+#work {
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    text-align: center;
+
+    h2 {
+        margin: 0.4em;
+    }
+}

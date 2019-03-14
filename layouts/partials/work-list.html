@@ -1,0 +1,18 @@
+<div id="work-list">
+    {{ $currentPage := . }}
+    {{ range where .Site.Pages.ByDate.Reverse "Section" "work" }}
+        {{ if (ne .Params.show false ) }}
+            {{ if and (ne .RelPermalink "/work/") (ne .RelPermalink $currentPage.RelPermalink)  }}
+                {{ .Params.Show }}
+                <a href="{{ .RelPermalink }}">
+                    {{ if isset .Params "thumbnail" }}
+                        {{ partial "image-thumb" (dict "Image" (.Resources.GetMatch .Params.thumbnail ) ) }}
+                    {{ else if isset .Params "image" }}
+                        {{ partial "image-thumb" (dict "Image" (.Resources.GetMatch .Params.image ) ) }}
+                    {{ end }}
+                    <div class="title"><span>{{ .Title }}</span></div>
+                </a>
+            {{ end }}
+        {{ end }}
+    {{ end }}
+</div>

@@ -1,0 +1,20 @@
+{{ define "head" }}
+    {{ partial "stylesheet" "404" }}
+{{ end }}
+
+{{ define "main" }}
+    <article>
+        <h1>404 Not Found!</h1>
+        <p>The requested page could not be found!</p>
+        {{ $currentPage := . }}
+        {{ with .Site.Menus.site }}
+            <ul id="links">
+                {{ range . }}
+                    <li>
+                        <a class="{{ if or ($currentPage.IsMenuCurrent "site" .) ($currentPage.HasMenuCurrent "site" .) }}active{{ end }}" href="{{ .URL }}" title="{{ .Title }}">{{ .Name }}</a>
+                    </li>
+                {{ end }}
+            </ul>
+        {{ end }}
+    </article>
+{{ end }}

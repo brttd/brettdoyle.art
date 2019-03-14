@@ -1,0 +1,27 @@
+{{ $link := .URL }}
+{{ $name := .name }}
+
+{{ $scratch := newScratch }}
+
+{{ if in $link "artstation" }}
+    {{ $scratch.Set "svg" (resources.Get "social-icons/artstation.svg") }}
+    {{ $scratch.Set "png" (resources.Get "social-icons/artstation.png") }}
+{{ else if in $link "github" }}
+    {{ $scratch.Set "svg" (resources.Get "social-icons/github.svg") }}
+    {{ $scratch.Set "png" (resources.Get "social-icons/github.png") }}
+{{ else if in $link "instagram" }}
+    {{ $scratch.Set "svg" (resources.Get "social-icons/instagram.svg") }}
+    {{ $scratch.Set "png" (resources.Get "social-icons/instagram.png") }}
+{{ else if in $link "youtube" }}
+    {{ $scratch.Set "svg" (resources.Get "social-icons/youtube.svg") }}  
+    {{ $scratch.Set "png" (resources.Get "social-icons/youtube.png") }}
+{{ else }}
+    {{ $scratch.Set "svg" (resources.Get "social-icons/link.svg") }}
+    {{ $scratch.Set "png" (resources.Get "social-icons/link.png") }}
+{{ end }}
+
+
+<a href="{{ $link }}" target="_blank" rel="noopener">
+    <img src='{{ ($scratch.Get "svg").RelPermalink }}' onerror="this.src='{{ ($scratch.Get "png").RelPermalink }}'">
+    {{ with .name }}{{ . }}{{ end }}
+</a>

@@ -1,0 +1,23 @@
+{{ $item := .Media }}
+{{ $Resources := .Resources}}
+
+{{ with .Resources.GetMatch (string .Media.image) }}
+    {{ $scratch := newScratch }}
+    {{ $scratch.Set "padding" 56.25 }}
+
+    {{ $imagePath := print "content" ($Resources.GetMatch $item.image).RelPermalink }}
+
+    {{ if fileExists $imagePath }}
+        {{ $image := imageConfig $imagePath }}
+        {{ $scratch.Set "padding" (mul (div (float $image.Height) $image.Width) 100) }}
+    {{ end }}
+
+    <div class="media image">
+        <div class="wrapper"{{ if not (eq ($scratch.Get "padding") 56.25) }} style='padding-top: {{ $scratch.Get "padding" }}%'{{ end }}>
+            {{ partial "image" (dict "Image" .) }}
+        </div>
+        {{ with $item.title }}
+            <div class="info"><div class="description"><span>{{ . }}</span></div></div>
+        {{ end }}
+    </div>
+{{ end }}

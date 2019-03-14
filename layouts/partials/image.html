@@ -1,0 +1,26 @@
+{{ $scratch := newScratch }}
+{{ $maxWidth := 1920 }}
+{{ $image := .Image }}
+
+{{ $scratch.Set "baseWidth" $image.Width }}
+
+{{ if gt 256 $image.Width }}
+    <img style="image-rendering: crisp-edges; image-rendering: pixelated" src="{{ $image.RelPermalink }}" height="{{ $image.Height }}" width="{{ $image.Width }}"/>
+{{ else }}
+
+    {{ if gt $image.Width $maxWidth }}
+        {{ $scratch.Set "baseWidth" $maxWidth }}
+    {{ end }}
+
+    {{ $scratch.Add "images" ( slice ( $image.Resize ( print ( string ($scratch.Get "baseWidth") ) "x") ) ) }}
+
+    {{ range $width := (seq (sub ($scratch.Get "baseWidth") 256) -256 256 ) }}
+        {{ $width := print (string $width) "x" }}
+        {{ $scratch.Add "images" ($image.Resize $width) }}
+    {{ end }}
+
+    {{ $images := $scratch.Get "images" }}
+
+    <img {{ with .id }}id="{{ . }}"{{ end }} srcset="{{ range $images }}{{ .RelPermalink }} {{ .Width }}w,{{ end }}" sizes="100vw" src="{{ (index $images 0).RelPermalink }}" width="{{ (index $images 0).Width }}" height="{{ (index $images 0).Height }}">
+
+{{ end }}

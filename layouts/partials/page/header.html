@@ -1,0 +1,24 @@
+<header>
+    <div id="header-width">
+        {{ $currentPage := . }}
+        {{ with .Site.Menus.Header }}
+            <nav>
+                {{ range . }}
+                    <li>
+                        <a class="{{ if or ($currentPage.IsMenuCurrent "Header" .) ($currentPage.HasMenuCurrent "Header" .) }}active{{ end }}" href="{{ .URL }}" title="{{ .Title }}">{{ .Name }}</a>
+                    </li>
+                {{ end }}
+            </nav>
+        {{ end }}
+        {{ with .Site.Data.Profile.links }}
+            <ul>
+                {{ range . }}
+                    <li>
+                        {{ partial "social-icon" (dict "URL" .URL) }}
+                    </li>
+                {{ end }}
+            </ul>
+        {{ end }}
+        <div class="clear"></div>
+    </div>
+</header>

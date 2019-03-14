@@ -1,1 +1,0 @@
-I'm {% info.name %}, a 3D artist.
