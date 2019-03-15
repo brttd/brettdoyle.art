@@ -1,7 +1,6 @@
 ---
 title: Lego Ferrari
 date: "2014-05-16"
-image: render_1.jpg
 images:
   - image: render_1.jpg
     title: Render
