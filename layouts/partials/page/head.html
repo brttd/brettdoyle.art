@@ -68,10 +68,11 @@
 
 {{ if ne ($scratch.Get "Image") 0 }}
     {{ with ($scratch.Get "Image") }}
-        {{ $imageLink := urls.Parse (.Fill "1200x630").Permalink }}
+        {{ $imageLink := urls.Parse (.Fill "1200x630 center").Permalink }}
         <meta property="og:image" content='{{ print "http://" $imageLink.Host $imageLink.Path }}'/>
         <meta property="og:image:secure_url" content='{{ print "https://" $imageLink.Host $imageLink.Path }}'/>
-        <meta property="twitter:image" content='{{(.Fill "1200x600").Permalink}}'/>
+
+        <meta property="twitter:image" content='{{(.Fill "1200x600 center").Permalink}}'/>
     {{ end }}
 {{ end }}
 
