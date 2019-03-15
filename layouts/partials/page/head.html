@@ -23,6 +23,21 @@
     {{ $scratch.Set "Description" . }}
 {{ end }}
 
+{{ $scratch.Set "Image" 0 }}
+{{ if isset .Params "image" }}
+    {{ with .Resources.GetMatch .Params.image }}
+        {{ $scratch.Set "Image" . }}
+    {{ end }}
+{{ else if isset .Params "images" }}
+    {{ $item := (index .Params.images 1) }}
+
+    {{ if isset $item "image" }}
+        {{ with .Resources.GetMatch (index .Params.images 1).image }}
+            {{ $scratch.Set "Image" . }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+
 {{ $favicon := resources.Get "favicon.png" }}
 {{ range $size := (seq 16 8 32) }}
     {{ $size := string $size }}
@@ -51,8 +66,8 @@
     <meta property="og:type" content="article" />
 {{ end }}
 
-{{ if isset .Params "image" }}
-    {{ with .Resources.GetMatch .Params.image }}
+{{ if ne ($scratch.Get "Image") 0 }}
+    {{ with ($scratch.Get "Image") }}
         {{ $imageLink := urls.Parse (.Fill "1200x630").Permalink }}
         <meta property="og:image" content='{{ print "http://" $imageLink.Host $imageLink.Path }}'/>
         <meta property="og:image:secure_url" content='{{ print "https://" $imageLink.Host $imageLink.Path }}'/>
