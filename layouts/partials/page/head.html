@@ -29,7 +29,7 @@
         {{ $scratch.Set "Image" . }}
     {{ end }}
 {{ else if isset .Params "images" }}
-    {{ $item := (index .Params.images 1) }}
+    {{ $item := (index .Params.images 0) }}
 
     {{ if isset $item "image" }}
         {{ with .Resources.GetMatch (index .Params.images 1).image }}
