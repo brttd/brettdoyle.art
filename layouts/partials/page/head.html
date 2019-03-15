@@ -32,7 +32,7 @@
     {{ $item := (index .Params.images 0) }}
 
     {{ if isset $item "image" }}
-        {{ with .Resources.GetMatch (index .Params.images 1).image }}
+        {{ with .Resources.GetMatch $item.image }}
             {{ $scratch.Set "Image" . }}
         {{ end }}
     {{ end }}
