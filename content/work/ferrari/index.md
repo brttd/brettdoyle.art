@@ -1,5 +1,6 @@
 ---
 title: Lego Ferrari
+show: false
 date: "2014-05-16"
 images:
   - image: render_1.jpg
