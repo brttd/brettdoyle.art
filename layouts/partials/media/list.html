@@ -1,7 +1,13 @@
 {{ $Resources := .Resources }}
+{{ $scratch := newScratch }}
 <section id="media">
     {{ range $index, $media := .Media }}
         {{ $ID := (print "media_" $index) }}
+
+        {{ if isset $media "video" }}
+            {{ $scratch.Set "video" "true" }}
+            {{ partial "media/video" (dict "Resources" $Resources "Media" $media "ID" $ID)}}
+        {{ end }}
 
         {{ if isset $media "image" }}
             {{ partial "media/image" (dict "Resources" $Resources "Media" $media "ID" $ID) }}
@@ -20,3 +26,8 @@
         {{ end }}
     {{ end }}
 </section>
+{{ if eq ($scratch.Get "video") "true" }}
+    {{ with resources.Get "js/media-video.js" }}
+        <script src="{{ ( . | resources.Minify | resources.Fingerprint ).RelPermalink }}"></script>
+    {{ end }}
+{{ end }}

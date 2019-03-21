@@ -198,7 +198,8 @@ main {
         }
 
         img,
-        iframe {
+        iframe,
+        video {
             display: block;
 
             width: 100%;
@@ -221,8 +222,8 @@ main {
 
                 background: hsl(0, 0%, 90%);
 
-                iframe,
-                img {
+                img,
+                iframe {
                     position: absolute;
                     top: 0;
                     left: 0;

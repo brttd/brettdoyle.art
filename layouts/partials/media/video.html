@@ -1,0 +1,20 @@
+{{ $item := .Media }}
+{{ $Resources := .Resources}}
+
+{{ with .Resources.GetMatch (string .Media.video) }}
+    {{ $scratch := newScratch }}
+    {{ $scratch.Set "padding" 56.25 }}
+
+    {{ if and (isset $item "width") (isset $item "height") }}
+        {{ $scratch.Set "padding" (mul (div (float $item.height) $item.width) 100) }}
+    {{ end }}
+
+    <div class="media video">
+        <div class="wrapper"{{ if not (eq ($scratch.Get "padding") 56.25) }} style='padding-top: {{ $scratch.Get "padding" }}%'{{ end }}>
+            <video loop src="{{ .RelPermalink }}" autoplay="1"></video>
+        </div>
+        {{ with $item.title }}
+            <div class="info"><div class="description"><span>{{ . }}</span></div></div>
+        {{ end }}
+    </div>
+{{ end }}
