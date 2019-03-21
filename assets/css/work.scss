@@ -365,11 +365,7 @@ main {
             }
         }
 
-        input:checked + input ~ div .selectors {
-            background: black;
-        }
-
-        @for $i from 0 through 5 {
+        @for $i from 0 through 6 {
             .i_#{$i}:checked ~ .wrapper .images :nth-child(#{$i + 1}) {
                 display: block;
 
