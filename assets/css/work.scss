@@ -322,6 +322,8 @@ main {
             padding: 0 1em;
             padding-right: 0.25em;
 
+            overflow: hidden;
+
             text-align: center;
 
             background: white;
@@ -346,6 +348,11 @@ main {
                 cursor: pointer;
 
                 transform: skewX(-10deg);
+
+                &:last-child {
+                    padding-right: 0.3em + 1em;
+                    margin-right: -1em;
+                }
 
                 &:hover {
                     background: rgb(128, 128, 128);
