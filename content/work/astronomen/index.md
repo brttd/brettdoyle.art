@@ -4,7 +4,7 @@ date: "2018-12-03"
 image: main_1.jpg
 thumbnail: thumbnail.jpg
 links:
-  - name: View Project On Artstation
+  - name: View on ArtStation
     URL: https://www.artstation.com/artwork/Jl994d
 media:
   - image: reference.jpg

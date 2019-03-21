@@ -12,7 +12,10 @@ thumbnail: main_1_square.jpg
 links:
     -
         URL: https://www.artstation.com/artwork/k4zGgd
-        name: View On ArtStation
+        name: View on ArtStation
+    -
+        URL: https://www.instagram.com/p/BoL7ysilHQe/
+        name: View Original Artwork
 media:
     -
         image: model_1.jpg

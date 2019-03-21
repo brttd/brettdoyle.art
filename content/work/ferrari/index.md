@@ -9,7 +9,7 @@ images:
     title: Wireframe
 thumbnail: thumbnail.jpg
 links:
-  - name: View On Artstation
+  - name: View on ArtStation
     URL: https://www.artstation.com/artwork/2e9kA
 media:
   - image: pieces_1.jpg

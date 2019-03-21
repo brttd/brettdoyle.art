@@ -4,7 +4,7 @@ date: "2018-11-14"
 image: high_close_1.jpg
 thumbnail: thumbnail.jpg
 links:
-  - name: View Project On Artstation
+  - name: View on ArtStation
     URL: https://www.artstation.com/artwork/XBBkV3
 media:
   - images:
