@@ -41,6 +41,7 @@ media:
                 image: p9.jpg
                 title: 6
         title: Sculpting Process
+        slider: true
         fade: true
     -
         images:
@@ -54,6 +55,7 @@ media:
         fade: true
     -
         video: turntable.mp4
+        muted: true
         title: Turntable
 ---
 A stylized dragon creature, based on a [2D artwork](https://www.instagram.com/p/BoL7ysilHQe/) by [Sam Nassour](https://samnassour.com/).

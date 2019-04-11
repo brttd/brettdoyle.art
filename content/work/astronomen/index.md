@@ -27,6 +27,7 @@ media:
       - image: texture_metallic.jpg
         title: Metallic
     title: Texture Maps
+    slider: true
     fade: true
   - iframe: https://www.youtube.com/embed/KYHENXWE1lg
   - iframe: https://sketchfab.com/models/fbeb6db328894659a5a7e7ac56d71abe/embed?camera=0&preload=1&ui_stop=0

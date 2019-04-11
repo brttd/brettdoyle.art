@@ -54,6 +54,7 @@ media:
                 image: high_1.jpg
                 title: Model
         title: Texture Maps
+        slider: true
         fade: true
     -
         images:

@@ -41,6 +41,7 @@ media:
        - image: process_5.jpg
          title: '5'
     title: Sculpting Process
+    slider: true
     fade: true
   - iframe: https://sketchfab.com/models/32c6e80298004b1b8faef94bb581f980/embed?camera=0&preload=1&ui_stop=0
 ---
