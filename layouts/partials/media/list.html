@@ -18,6 +18,9 @@
         {{ end }}
 
         {{ if isset $media "images" }}
+            {{ if isset $media "slider" }}
+                {{ $scratch.Set "slider" "true" }}
+            {{ end }}
             {{ partial "media/images" (dict "Resources" $Resources "Media" $media "ID" $ID) }}
         {{ end }}
 
@@ -28,6 +31,11 @@
 </section>
 {{ if eq ($scratch.Get "video") "true" }}
     {{ with resources.Get "js/media-video.js" }}
+        <script src="{{ ( . | resources.Minify | resources.Fingerprint ).RelPermalink }}"></script>
+    {{ end }}
+{{ end }}
+{{ if eq ($scratch.Get "slider") "true" }}
+    {{ with resources.Get "js/media-slider.js" }}
         <script src="{{ ( . | resources.Minify | resources.Fingerprint ).RelPermalink }}"></script>
     {{ end }}
 {{ end }}
