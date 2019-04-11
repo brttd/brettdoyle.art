@@ -100,6 +100,7 @@ function setupVideo(element) {
 
     requestAnimationFrame(updateSliderSize)
     window.addEventListener('resize', updateSliderSize)
+    window.addEventListener('load', updateSliderSize)
 
     if (video.paused) {
         onButtonClick()

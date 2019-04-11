@@ -92,6 +92,7 @@ function setupImage(element) {
 
     requestAnimationFrame(updateSliderSize)
     window.addEventListener('resize', updateSliderSize)
+    window.addEventListener('load', updateSliderSize)
 
     for (var i = 0; i < inputs.length; i++) {
         inputs[i]._index = i
