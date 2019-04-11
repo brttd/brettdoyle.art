@@ -14,7 +14,7 @@
         {{ end }}
         <div class="wrapper">
             <div class="images{{ if isset $item "fade"}} fade{{ end }} ">
-                {{ range . }}
+                {{ range first 7 . }}
                     {{ with $Resources.GetMatch .image }}
                         {{ partial "image" (dict "Image" .) }}
                     {{ end }}
