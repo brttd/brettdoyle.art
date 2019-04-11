@@ -545,30 +545,31 @@ main {
   position: absolute;
   left: -1em;
   bottom: -1px;
-  padding: 0 1em;
-  padding-right: 0.25em;
-  overflow: hidden;
+  padding: 0 0.9em;
   text-align: center;
-  background: white;
-  -webkit-transform: skewX(10deg);
-          transform: skewX(10deg);
 }
 #media .media .selectors label {
   display: inline-block;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   min-width: 2em;
-  margin: 0 -1px;
-  padding: 0.2em 0.3em;
+  margin: 0 -0.1em;
+  padding: 0.2em 0.5em;
   font-size: 1rem;
   color: white;
   text-decoration: none;
   background: black;
   cursor: pointer;
+  -webkit-transform: skewX(10deg);
+          transform: skewX(10deg);
+}
+#media .media .selectors label span {
+  display: inline-block;
   -webkit-transform: skewX(-10deg);
           transform: skewX(-10deg);
 }
-#media .media .selectors label:last-child {
-  padding-right: 1.3em;
-  margin-right: -1em;
+#media .media .selectors label:first-child {
+  padding-left: 0.7em;
 }
 #media .media .selectors label:hover {
   background: gray;
@@ -580,6 +581,113 @@ main {
 #media .media .selectors label.active {
   color: black;
   background: white;
+}
+#media .media .selectors .slider {
+  display: block;
+  position: relative;
+  width: 100%;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 100%;
+          flex: 0 0 100%;
+  min-height: 1em;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+#media .media .selectors .slider .line {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+  height: 0.1em;
+  min-height: 2px;
+  background: black;
+  -webkit-transition: background 0.2s, height 0.1s;
+  transition: background 0.2s, height 0.1s;
+}
+#media .media .selectors .slider .button {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  height: 0.4em;
+  width: 0.4em;
+  background: black;
+  border-radius: 100%;
+  pointer-events: none;
+}
+#media .media .selectors .slider:active .button {
+  height: 0.56em;
+  width: 0.56em;
+}
+#media .media .selectors .slider:hover .line {
+  height: 0.13em;
+}
+#media .media .selectors .slider:hover .button {
+  height: 0.48em;
+  width: 0.48em;
+}
+#media .media .selectors .slider.active .line,
+#media .media .selectors .slider.active .button {
+  background: white;
+}
+#media .media.slider .selectors, #media .media.video .selectors {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  right: -1em;
+}
+#media .media.slider {
+  padding-bottom: 1.2em;
+}
+#media .media.slider .selectors {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+}
+#media .media.slider .selectors .slider {
+  background: black;
+}
+#media .media.slider .selectors .slider .line,
+#media .media.slider .selectors .slider .button {
+  background: white;
+}
+#media .media.slider .selectors label {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 3em;
+          flex: 1 1 3em;
+}
+#media .media.video .selectors {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+}
+#media .media.video .selectors .slider {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
+}
+#media .media.video .selectors label {
+  position: relative;
+  z-index: 1;
+  padding: 0.2em 0.8em;
+}
+@media (hover: hover) {
+  #media .media .slider {
+    opacity: 0;
+    -webkit-transition: opacity 0.1s;
+    transition: opacity 0.1s;
+  }
+  #media .media.slider .slider {
+    opacity: 0.2;
+  }
+  #media .media:hover .slider {
+    opacity: 1;
+  }
 }
 #media .media .i_0:checked ~ .wrapper .images :nth-child(1) {
   display: block;
