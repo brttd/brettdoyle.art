@@ -31,7 +31,7 @@ function onCanvasSizeChange() {
     resetGrid()
 }
 
-let time = 0
+var time = 0
 function draw() {
     var time = Date.now()
     for (var x = gridPadding / 2; x < w; x += gridSize + gridPadding) {
