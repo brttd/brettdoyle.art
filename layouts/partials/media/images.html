@@ -22,12 +22,18 @@
             </div>
         </div>
         <div class="info">
-            <div class="selectors">
-                {{ range $index, $image := . }}<label for="{{ $id }}_{{ $index }}" class="i_{{ $index }}">{{ $image.title }}</label>{{ end }}
-            </div>
             {{ with $item.title }}
                 <div class="description"><span>{{ . }}</span></div>
             {{ end }}
+            <div class="selectors">
+                {{ range $index, $image := first 7 . }}
+                    <label for="{{ $id }}_{{ $index }}" class="i_{{ $index }}">
+                        <span>
+                        {{ $image.title }}
+                        </span>
+                    </label>
+                {{ end }}
+            </div>
         </div>
     </div>
 {{ end }}
