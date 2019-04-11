@@ -8,8 +8,8 @@
         {{ $scratch.Set "padding" (mul (div (float .Height) .Width) 100)}}
     {{ end }}
 
-    <div class='media images'>
-        {{ range $index, $image := . }}
+    <div class='media images{{if isset $item "slider"}} slider{{ end }}'>
+        {{ range $index, $image := first 7 . }}
             <input type="radio" name="{{ $id }}" id="{{ $id }}_{{ $index }}" class="i_{{ $index }}" {{ if eq $index 0 }}checked{{ end }}>
         {{ end }}
         <div class="wrapper">
