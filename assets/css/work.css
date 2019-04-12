@@ -52,10 +52,11 @@ li {
 }
 
 article li {
-  margin-right: 1em;
+  margin: 0.1em;
+  margin-right: 0.4em;
 }
 article li:last-child {
-  margin-right: 0;
+  margin-right: 0.1em;
 }
 
 article a,
@@ -100,8 +101,8 @@ header a img {
 article p a,
 article span a,
 article ul a {
-  margin: -0.2em -0.3em;
-  padding: 0.2em 0.3em;
+  margin: -0.2em;
+  padding: 0.2em;
 }
 
 img {

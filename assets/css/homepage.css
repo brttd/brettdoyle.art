@@ -51,10 +51,11 @@ li {
 }
 
 article li {
-  margin-right: 1em;
+  margin: 0.1em;
+  margin-right: 0.4em;
 }
 article li:last-child {
-  margin-right: 0;
+  margin-right: 0.1em;
 }
 
 article a,
@@ -99,8 +100,8 @@ header a img {
 article p a,
 article span a,
 article ul a {
-  margin: -0.2em -0.3em;
-  padding: 0.2em 0.3em;
+  margin: -0.2em;
+  padding: 0.2em;
 }
 
 img {
@@ -207,7 +208,6 @@ article {
   display: block;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  vertical-align: middle;
   -ms-flex-item-align: center;
       align-self: center;
 }
@@ -229,8 +229,7 @@ article {
   min-height: fit-content;
   max-height: 100%;
   max-height: 100vh;
-  margin: 1em;
-  margin-right: 0;
+  margin-left: 1em;
 }
 
 @media (orientation: landscape) and (min-width: 800px) and (min-height: 28em) {
@@ -246,7 +245,7 @@ article {
   max-width: 37vw;
   min-width: 14em;
   max-height: 100%;
-  padding: 0;
+  padding: 1em 0;
 }
 #bio h1 {
   font-size: 2em;
@@ -257,13 +256,10 @@ article {
 }
 #bio #links {
   display: inline-block;
-  margin: 0;
-  padding: 0.2em 0.3em;
-  padding-bottom: 0.5em;
+  margin: 0 -0.3em;
+  padding: 0.1em;
+  padding-bottom: 0.4em;
   border-bottom: 0.1em solid #67c16b;
-}
-#bio #links a {
-  padding: 0.3em;
 }
 
 #portfolio {
@@ -308,7 +304,8 @@ article {
   #bio {
     max-width: 100%;
     min-width: auto;
-    padding: 0.5em 0.8em;
+    padding: 0.8em;
+    padding-bottom: 0;
   }
   #bio h1,
   #bio p,
@@ -328,7 +325,16 @@ article {
   }
   #portfolio h2 {
     margin: 0.5em;
-    margin-top: 1em;
+  }
+}
+@media (orientation: landscape) and (max-width: 1900px) {
+  #work-list a {
+    width: 33.3%;
+  }
+}
+@media (orientation: landscape) and (max-width: 1200px) {
+  #work-list a {
+    width: 50%;
   }
 }
 @media (max-width: 600px) {
