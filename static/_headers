@@ -1,3 +1,12 @@
 /*
   X-Clacks-Overhead: GNU Terry Pratchett
-  Cache-Control: no-transform, max-age=86400
+  Cache-Control: no-transform, max-age=259200
+
+/social-icons*
+  Cache-Control: no-transform, max-age=7889400
+
+/css*
+  Cache-Control: no-transform, max-age=15778800
+
+/js*
+  Cache-Control: no-transform, max-age=31557600
