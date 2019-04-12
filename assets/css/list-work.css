@@ -173,6 +173,7 @@ header img {
 }
 #work-list {
   font-size: 0;
+  overflow: hidden;
 }
 #work-list a {
   display: inline-block;
