@@ -157,8 +157,17 @@ $portfolio_vertical_padding: 0.5em;
     }
 }
 
+@media (orientation: landscape) and (max-width: 1900px) {
+    #work-list a {
+        width: 33.3%;
     }
 }
+@media (orientation: landscape) and (max-width: 1200px) {
+    #work-list a {
+        width: 50%;
+    }
+}
+
 @media (max-width: 600px) {
     #bio_wrapper,
     #portfolio {
