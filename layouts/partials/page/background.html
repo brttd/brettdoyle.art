@@ -8,7 +8,7 @@ var background_scripts = [
         {{ $path := print "js/backgrounds/" . ".js" }}
 
         {{ if fileExists (print "assets/" $path ) }}
-            {{ $file := (resources.Get $path) | resources.Minify }}
+            {{ $file := (resources.Get $path) | resources.Minify | resources.Fingerprint }}
             {{ $file.RelPermalink }},
         {{ end }}
     {{ end }}
