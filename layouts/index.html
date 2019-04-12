@@ -12,9 +12,8 @@
                 <article id="bio">
                     <h1>{{ .Site.Data.Profile.name }}</h1>
                     {{ .Content }}
-                    <span id="email">My email is <a href="mailto://{{ .Site.Data.Profile.email }}" target="_blank" rel="noopener">{{ .Site.Data.Profile.email }}</a>.</span>
-                    {{ with .Site.Data.Profile.links }}
-                        <span id="link-text">And you can find me on:</span>
+                    <span id="email">My email is <a href="mailto://{{ .Site.Data.Profile.email }}" target="_blank" rel="noopener">{{ .Site.Data.Profile.email }}</a>{{ with .Site.Data.Profile.links }},</span>
+                        <span id="link-text">and you can find me on:</span>
                         <ul id="links">
                         {{ range . }}
                             <li>
@@ -22,7 +21,7 @@
                             </li>
                         {{ end }}
                         </ul>
-                    {{ end }}
+                    {{ else }}.</span>{{ end }}
                 </article>
             </div>
             <div id="portfolio">
