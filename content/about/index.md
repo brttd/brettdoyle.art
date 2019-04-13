@@ -5,11 +5,12 @@ menus: [Header, site]
 ---
 ![profile_image](brett.jpg)
 # Brett Doyle
-I'm a 20 year old 3D artist, who currently lives in Hampton, London and is looking for work as a Modeller in the Film/VFX industry, or environment/prop/modelling/texturing artist in the game industry.
+I'm a 20 year old 3D artist, who currently lives in Hampton, London and is looking for work as a 3D artist in the games industry, or modeller in the Film/VFX industry.
 
 
 I've been doing 3D modelling since 2013. I first got interested in it while making custom maps and models for a game I used to play.
 Since then I've learnt and experimented with many different 3D tools and applications (starting with 3DS Max), and also learnt a few programming languages which I've used for both 3D and 2D creative coding (as well as some web design and software tools).
+
 
 From the start, I've wanted to use digital 3D as an artistic medium, and have actively worked at improving my artistic and technical abilities.
 I enjoy digital sculpture the most, and am inspired by artists such as Simon Stålenhag, Olly Moss, and Pascal Blanché.
