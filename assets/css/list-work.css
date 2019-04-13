@@ -173,7 +173,7 @@ header img {
 }
 #work-list {
   font-size: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 #work-list a {
   display: inline-block;
@@ -254,6 +254,6 @@ main {
 #work-list a {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  padding: 0.9em;
-  background: white;
+  padding: 0.8em;
+  background: transparent;
 }
