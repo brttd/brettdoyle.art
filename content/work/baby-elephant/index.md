@@ -54,4 +54,4 @@ media:
 3D sculpt of a baby elephant.
 Created with ZBrush and Maya, rendered with Arnold.
 
-Made for the [Rookies Circus Challenge](https://www.therookies.co/contests/groups/circus-challenge).
+The sculpting took about a week to do, made for the [Rookies Circus Challenge](https://www.therookies.co/contests/groups/circus-challenge).
