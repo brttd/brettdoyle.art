@@ -165,10 +165,14 @@ main {
 #links {
     display: inline-block;
 
-    padding: 0.2em 0.3em;
+    padding: 0;
     padding-top: 0.5em;
 
     border-top: 0.1em solid $high_color;
+
+    li {
+        margin: 0.2em;
+    }
 }
 
 #media {
