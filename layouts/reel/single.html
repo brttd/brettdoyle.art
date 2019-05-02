@@ -3,7 +3,9 @@
 {{ end }}
 
 {{ define "main" }}
+    {{ $content := .Content }}
     {{ with .Site.Data.Profile.youtubeReel }}
+        {{ with $content }}<p>{{ $content }}</p>{{ end }}
         <div id="iframe-wrapper">
             <iframe
                 width="1920"
@@ -15,7 +17,7 @@
             ></iframe>
         </div>
     {{ else }}
-        <p>{{ .Content }}</p>
+        <p>{{ $content }}</p>
     {{ end }}
 {{ end }}
 
