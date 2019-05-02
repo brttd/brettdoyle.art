@@ -1,5 +1,6 @@
 ---
 title: Astronomen
+showHome: false
 date: "2018-12-03"
 image: main_1.jpg
 thumbnail: thumbnail.jpg
