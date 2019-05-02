@@ -77,6 +77,10 @@ article {
         padding-bottom: 0.4em;
 
         border-bottom: 0.1em solid $high_color;
+
+        a {
+            text-decoration: none;
+        }
     }
 }
 

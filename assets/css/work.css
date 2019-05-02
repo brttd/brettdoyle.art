@@ -103,6 +103,7 @@ article span a,
 article ul a {
   margin: -0.2em;
   padding: 0.2em;
+  text-decoration: underline;
 }
 
 img {
