@@ -14,6 +14,8 @@ links:
     URL: https://www.therookies.co/entries/1069
 media:
   - images:
+      - image: reference_1.jpg
+        title: Reference
       - image: side.jpg
         title: Side
       - image: back.jpg

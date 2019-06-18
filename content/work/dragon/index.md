@@ -21,6 +21,9 @@ media:
         image: model_1.jpg
         title: Model & Wireframe
     -
+        image: concept.jpg
+        title: Original Art
+    -
         images:
             -
                 image: p1.jpg
