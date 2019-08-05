@@ -5,7 +5,7 @@ menus: [Header, site]
 ---
 ![profile_image](brett.jpg)
 # Brett Doyle
-I'm a 20 year old 3D artist, who currently lives in Hampton, London and is looking for work as a 3D artist in the games industry, or modeller in the Film/VFX industry.
+I'm a 20 year old programmer & 3D artist, who currently lives in Hampton, London.
 
 
 I've been doing 3D modelling since 2013. I first got interested in it while making custom maps and models for a game I used to play.
