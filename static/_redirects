@@ -8,3 +8,4 @@
 /display-whisper* https://display-whisper.brettdoyle.art/:splat 302
 
 /proxy/* https://:splat 200
+/http-proxy/* http://:splat 200
