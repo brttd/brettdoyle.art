@@ -5,8 +5,6 @@ image: main.jpg
 menus: [Header, site]
 weight: 1
 ---
-I'm a 20 year old programmer & 3D artist, living in London.
+I'm a developer & 3D artist.
 <!--more-->
-I especially enjoy digital organic sculpting.
-I have skills in hard-surface, environment, and creature modeling, both high and low-poly.
-Last year I completed CG Spectrum's Diploma of [Advanced 3D Modeling](https://www.cgspectrum.edu.au/online-courses/zbrush-digital-sculpting-classes/).
+I work as a back-end web developer, and also enjoy digital 3D sculpting.
